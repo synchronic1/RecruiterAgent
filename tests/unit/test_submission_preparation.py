@@ -33,6 +33,16 @@ def test_registration_preserves_blurb_as_one_argument(tmp_path):
     assert "--register" in command
 
 
+def test_registration_allows_video_to_be_added_later(tmp_path):
+    module = load("submission/prepare_index.py", "submission_prepare_test")
+    data = complete_listing(tmp_path)
+    data["video"] = ""
+    command = module.registration_command(data, tmp_path)
+    assert "--video" not in command
+    assert command[command.index("--image") + 1] == data["image"]
+    assert "--register" in command
+
+
 @pytest.mark.parametrize("key,value", [("repo", ""), ("video", "https://youtube.com/watch?v=abcdefghijk"),
                                       ("install_url", "http://localhost/install"),
                                       ("image", "https://example.com/demo.png")])

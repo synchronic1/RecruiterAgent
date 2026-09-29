@@ -9,6 +9,9 @@ one. A manifest records the commit and content hashes. It requires the OpenClaw
 collector to be present. The upstream client is
 Apache licensed, separately from RecruiterAgent's MIT license.
 
-The client has not been downloaded in this checkout because the shell's network
-proxy was unavailable. The upstream collector has not been tested against your
-OpenClaw state. Run its self-check and inspect a real dry-run before reporting.
+On 2026-09-29, upstream revision
+`fbfe8b635c1f20ce1f0152497abb419623f53329` was cloned into a separate Linux
+submission-preparation directory. Its `--self-check` passed under Python 3.12.13;
+that check covers merge behavior, flag parsing, and the Hermes delta collector.
+It does not demonstrate collection from the actual OpenClaw instance. No live
+usage report was sent. Inspect a real dry-run before enabling reporting.

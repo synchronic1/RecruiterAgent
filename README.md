@@ -219,8 +219,11 @@ licenses. The license does not grant redistribution rights to applicant resumes;
 source releases exclude applicant data and downloaded dependencies.
 
 Agent Index submission materials and reporting setup are in
-[submission/README.md](submission/README.md). Live OpenClaw engagement and
-external registration remain operator steps.
+[submission/README.md](submission/README.md). RecruiterAgent is
+[registered on the Agent Index](https://aiworthusing.com/agent-index/recruiteragent).
+Live OpenClaw engagement, usage reporting, a demo video, and verification remain
+operator steps. A separate Docker instance can follow the
+[Plow OpenClaw setup guide](submission/plow-openclaw.md).
 
 See [`docs/acceptance-report.md`](docs/acceptance-report.md) for which acceptance
 tests pass with recorded evidence, which are implemented but not yet verified, and

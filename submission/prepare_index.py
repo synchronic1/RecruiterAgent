@@ -16,13 +16,14 @@ CLIENT_REPO = "https://raw.githubusercontent.com/plow-pbc/agent-index-client"
 
 
 def registration_command(data: dict, base: Path = ROOT) -> list[str]:
-    missing = [key for key in ("agent", "name", "blurb", "repo", "video", "image", "install_url")
+    missing = [key for key in ("agent", "name", "blurb", "repo", "image", "install_url")
                if not isinstance(data.get(key), str) or not data[key].strip()]
     if missing:
         raise ValueError("Fill these listing fields first: " + ", ".join(missing))
     if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", data["agent"]):
         raise ValueError("agent must be a lowercase slug")
-    if not re.fullmatch(r"[A-Za-z0-9_-]{11}", data["video"]):
+    video = data.get("video", "")
+    if not isinstance(video, str) or (video and not re.fullmatch(r"[A-Za-z0-9_-]{11}", video)):
         raise ValueError("video must be the 11-character YouTube ID, not a URL")
     for key in ("repo", "image", "install_url"):
         parsed = urlsplit(data[key])
@@ -37,6 +38,8 @@ def registration_command(data: dict, base: Path = ROOT) -> list[str]:
     for key, flag in (("agent", "--agent"), ("name", "--name"), ("blurb", "--blurb"),
                       ("runtime", "--runtime"), ("repo", "--repo"), ("video", "--video"),
                       ("image", "--image"), ("install_url", "--install-url")):
+        if key == "video" and not video:
+            continue
         command.extend([flag, data.get(key, "OpenClaw")])
     command.extend(["--logo", str(logo)])
     return command
@@ -86,6 +89,8 @@ def main() -> int:
             fetch_client()
         data = json.loads((ROOT / "listing.json").read_text(encoding="utf-8"))
         print(shlex.join(registration_command(data)))
+        if not data.get("video"):
+            print("Video omitted; add a YouTube demo before requesting prize qualification.")
         print("Review the command before running it on the OpenClaw host.")
     except (ValueError, OSError) as exc:
         print(str(exc))
