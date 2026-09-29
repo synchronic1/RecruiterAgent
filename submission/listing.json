@@ -4,9 +4,9 @@
   "blurb": "Cut through high volumes of applications with agentic AI and evidence-backed review, curated by humans.",
   "runtime": "OpenClaw",
   "demo_url": "https://recruiteragent.airanger.dev/recruiteragent-design-preview",
-  "repo": "",
+  "repo": "https://github.com/synchronic1/RecruiterAgent",
   "video": "",
-  "image": "",
-  "install_url": "",
+  "image": "https://raw.githubusercontent.com/synchronic1/RecruiterAgent/main/submission/public/recruiteragent-demo.png",
+  "install_url": "https://github.com/synchronic1/RecruiterAgent/blob/main/skill/references/install.md",
   "logo": "public/recruiteragent-logo.png"
 }
