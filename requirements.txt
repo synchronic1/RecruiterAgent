@@ -1,0 +1,10 @@
+# Runtime install from this source directory; binaries are downloaded by pip.
+# Keep tested versions constrained by the existing lock, without installing tests.
+-c requirements.lock
+fastapi
+uvicorn
+h11
+pypdf
+python-docx
+httpx
+.

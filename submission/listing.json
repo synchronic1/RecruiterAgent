@@ -1,0 +1,12 @@
+{
+  "agent": "recruiteragent",
+  "name": "RecruiterAgent",
+  "blurb": "Cut through high volumes of applications with agentic AI and evidence-backed review, curated by humans.",
+  "runtime": "OpenClaw",
+  "demo_url": "https://recruiteragent.airanger.dev/recruiteragent-design-preview",
+  "repo": "",
+  "video": "",
+  "image": "",
+  "install_url": "",
+  "logo": "public/recruiteragent-logo.png"
+}

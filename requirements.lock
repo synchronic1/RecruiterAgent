@@ -1,0 +1,60 @@
+# Dependency lockfile for resume-review.
+#
+# This pins the exact environment the deterministic test suite was last run
+# against: 1068 passed, 15 skipped, 0 failed on
+#   Python 3.14.0, Windows 11 Pro (26200), `python -m pytest`.
+#
+# Relationship to pyproject.toml: pyproject expresses the *compatibility
+# envelope* (for example "fastapi>=0.141,<0.142"). This file records the single
+# resolved version inside that envelope. A version may only move here after the
+# full suite has been re-run and the counts above updated. Do not hand-edit a
+# pin to "pick up a fix" -- change the envelope in pyproject.toml, resolve, and
+# re-test.
+#
+# Scope: the whole tested environment, runtime and test-only together, because
+# the release evidence is produced by running the suite in one environment. The
+# two sections below label which is which; both are installed for a test run.
+#
+# Install:  .venv/Scripts/python.exe -m pip install -r requirements.lock
+#
+# Known declaration gap, closed: jsonschema is listed below as a test dependency
+# and is now declared in pyproject.toml's ``dev`` extra. The one test that uses it
+# (tests/unit/test_web_assets.py, manifest schema validation) guards with
+# pytest.importorskip, so while it was undeclared a clean install made that check
+# SILENTLY SKIP and report a pass. The declaration is what makes the pass mean
+# something, so keep the two in step.
+
+# --- runtime (pyproject [project].dependencies and their transitive closure) ---
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.15.1
+certifi==2026.7.22
+click==8.5.0
+colorama==0.4.6
+fastapi==0.141.1
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.20
+lxml==6.1.3
+pydantic==2.13.5
+pydantic_core==2.46.5
+pypdf==6.19.0
+python-docx==1.2.0
+starlette==1.7.0
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+uvicorn==0.54.0
+
+# --- test-only (pyproject [project.optional-dependencies].dev) ---
+attrs==26.1.0
+iniconfig==2.3.0
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+packaging==26.3
+pluggy==1.6.0
+Pygments==2.21.0
+pytest==8.4.2
+pytest-timeout==2.4.0
+referencing==0.37.0
+rpds-py==2026.6.3

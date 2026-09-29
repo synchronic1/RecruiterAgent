@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Install RecruiterAgent</title><style>
+body{font:16px/1.6 system-ui,sans-serif;color:#173e4b;background:#f6faf9;margin:0}main{max-width:850px;margin:48px auto;padding:28px;background:white;border:1px solid #d6e3df;border-radius:16px}h1{font-size:36px;margin-bottom:8px}pre{overflow:auto;background:#edf4f2;padding:18px;border-radius:8px}a{color:#08786d}.brand{font-weight:700;color:#08786d}li{margin:10px 0}
+</style></head><body><main><div class="brand">RecruiterAgent · MIT source</div>
+<h1>Cut through application volume.<br>Keep humans in the review.</h1>
+<p>Install the source-only skill alongside your existing OpenClaw agent. Python dependencies are downloaded during setup; applicant data and dependency binaries are not bundled.</p>
+<h2>Prerequisites</h2><p>Python 3.12 or later, a configured OpenClaw instance, package-registry access, and a local job folder. SQLite must stay on storage-host-local storage.</p>
+<h2>Build from the public source checkout</h2><p>Obtain the repository linked on the RecruiterAgent Agent Index listing, then run from its root:</p>
+<pre>python tools/build_openclaw_package.py --output dist/RecruiterAgent</pre>
+<h2>Make the skill available to OpenClaw</h2><p>Install the generated directory using your OpenClaw version's local skill installation mechanism, or copy it to a trusted configured skills directory. Confirm the intended agent can see the skill. Install only the clean generated directory.</p>
+<h2>Install and check the application</h2><p>Replace <code>{baseDir}</code> with the installed skill directory:</p>
+<pre>python "{baseDir}/scripts/install.py"
+python "{baseDir}/scripts/install.py" --verify-only
+python "{baseDir}/scripts/run.py" -- --help</pre>
+<h2>Start a real review workspace</h2>
+<pre>python "{baseDir}/scripts/run.py" -- setup --folder &lt;job-folder&gt; --job &lt;job-description.txt&gt; --json
+python "{baseDir}/scripts/run.py" -- status --instance &lt;returned-instance-id&gt; --json
+python "{baseDir}/scripts/run.py" -- start --instance &lt;returned-instance-id&gt;</pre>
+<p>Follow the helper's returned connection and session instructions. Configure the restricted OpenClaw analysis route using the packaged operational documentation. Never put Gateway credentials in a page.</p>
+<h2>Try a synthetic design preview</h2><pre>python "{baseDir}/scripts/install.py" --demo</pre>
+<p>Serve only the generated <code>application/docs/review-artifacts</code> directory on loopback. The preview has 200 synthetic candidates; changes stay in the tab and its feedback is not sent to OpenClaw.</p>
+<h2>Human curation</h2><p>Humans approve criteria and review evidence. Advance, hold, and reject are reviewer decisions. File moves require approval of the exact plan; no automatic rejection or permanent deletion occurs.</p>
+<p>See <code>references/install.md</code> and the packaged installation and local-operation guides for details. OpenClaw compatibility and live inference must be verified on your own instance.</p>
+</main></body></html>

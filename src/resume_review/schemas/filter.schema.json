@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-review.local/schemas/filter.schema.json",
+  "title": "FilterExpression",
+  "description": "Allowlisted filter tree compiled to parameterized SQL. Model-produced SQL, regular expressions, JavaScript, shell commands, and filesystem paths are never executed. Depth is bounded to 3 and predicates to 20. There is deliberately no generic negation operator until its unknown-value behaviour is implemented and tested.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "expression"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "instance_id": { "type": "string" },
+    "criteria_version": { "type": "integer", "minimum": 1 },
+    "expression": { "$ref": "#/$defs/node" },
+    "unknown_policy": {
+      "enum": ["include_with_warning", "exclude"],
+      "default": "include_with_warning",
+      "description": "Default is include_with_warning. A filter must never silently hide unprocessed submissions, and 'not established' must never be rendered as 'does not have'."
+    },
+    "sort": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field"],
+        "properties": {
+          "field": {
+            "enum": [
+              "ingested_at", "original_filename", "display_name", "processing_state",
+              "review_state", "open_task_count", "current_rel_path", "document_id"
+            ]
+          },
+          "direction": { "enum": ["asc", "desc"], "default": "asc" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "node": {
+      "oneOf": [
+        { "$ref": "#/$defs/group" },
+        { "$ref": "#/$defs/predicate" },
+        { "$ref": "#/$defs/evidencePredicate" }
+      ]
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "children"],
+      "properties": {
+        "type": { "enum": ["and", "or"] },
+        "children": { "type": "array", "minItems": 1, "maxItems": 20, "items": { "$ref": "#/$defs/node" } }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "field", "op"],
+      "properties": {
+        "type": { "const": "predicate" },
+        "field": {
+          "enum": [
+            "review_state", "processing_state", "location", "pending_intent",
+            "open_task_count", "original_filename", "display_name", "current_rel_path",
+            "duplicate_content", "decision_needs_recheck", "ingested_at", "document_id",
+            "summary_text"
+          ]
+        },
+        "op": {
+          "enum": [
+            "eq", "ne", "in", "not_in", "lt", "lte", "gt", "gte",
+            "contains", "not_contains", "is_null", "is_not_null", "is_true", "is_false"
+          ]
+        },
+        "value": {}
+      }
+    },
+    "evidencePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "field", "op"],
+      "description": "Evidence predicates use true/false/unknown semantics. A missing, stale, or superseded assessment evaluates to unknown, which is governed by unknown_policy.",
+      "properties": {
+        "type": { "const": "predicate" },
+        "field": { "type": "string", "pattern": "^criterion:[A-Za-z0-9_.:-]{1,64}$" },
+        "op": { "enum": ["is_supported", "is_not_found", "is_unclear", "is_needs_manual_review"] }
+      }
+    }
+  }
+}

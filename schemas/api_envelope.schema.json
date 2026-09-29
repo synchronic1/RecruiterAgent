@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-review.local/schemas/api_envelope.schema.json",
+  "title": "ApiEnvelope",
+  "description": "Standard response envelope and stable error contract (PRD 5.3 / 12.2). Business endpoints are scoped under /api/v1/instances/{instance_id}. No envelope ever contains candidate names, file paths, or credentials in an error message.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ok"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$" },
+    "instance_id": { "type": ["string", "null"] },
+    "request_id": { "type": "string" },
+    "state_revision": { "type": ["integer", "null"], "minimum": 0 },
+    "data": {},
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code"],
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "detail": { "type": "object", "additionalProperties": true }
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string", "description": "Safe for display. Never contains a candidate name, an absolute path, or a credential." },
+        "detail": { "type": "object", "additionalProperties": true },
+        "retryable": { "type": "boolean", "default": false }
+      }
+    },
+    "job_id": { "type": ["string", "null"], "description": "Present on 202 responses carrying durable work." }
+  }
+}

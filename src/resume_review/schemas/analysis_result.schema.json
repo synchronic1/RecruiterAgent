@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-review.local/schemas/analysis_result.schema.json",
+  "title": "AnalysisResult",
+  "description": "Versioned result returned by the restricted analysis agent for exactly one leased analysis job. Structural validation is necessary but not sufficient: the helper additionally verifies criterion IDs against the bound criteria version, source_revision against current state, span-id existence, and literal occurrence of each quote inside the identified span.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "document_id", "source_revision", "criteria_version", "summary", "criteria", "evidence"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "instance_id": {
+      "type": "string",
+      "description": "Optional echo. The helper binds the real instance from the leased job and rejects a mismatch; this field is never trusted."
+    },
+    "document_id": { "type": "string", "minLength": 1 },
+    "source_revision": { "type": "integer", "minimum": 1 },
+    "criteria_version": { "type": "integer", "minimum": 1 },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "evidence_ids"],
+      "properties": {
+        "text": { "type": "string", "maxLength": 4000 },
+        "evidence_ids": { "type": "array", "items": { "type": "string" }, "maxItems": 50 }
+      }
+    },
+    "criteria": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion_id", "result", "evidence_ids"],
+        "properties": {
+          "criterion_id": { "type": "string", "minLength": 1 },
+          "result": {
+            "enum": ["supported", "not_found", "unclear", "needs_manual_review"],
+            "description": "not_found means the processed document did not establish the criterion. It is NOT 'unqualified' and never sets Keep or Reject."
+          },
+          "explanation": { "type": "string", "maxLength": 2000 },
+          "evidence_ids": { "type": "array", "items": { "type": "string" }, "maxItems": 25 }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "span_id", "quote"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "span_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "locator": {
+            "type": "object",
+            "description": "Human-readable locator echoed from the supplied span. The helper re-derives it from the span; a mismatch is a warning, not an authority.",
+            "additionalProperties": true
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "description": "Must occur literally inside the identified source span after whitespace normalization. Fabricated quotes are a hard validation failure."
+          }
+        }
+      }
+    },
+    "suggested_tasks": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "title"],
+        "properties": {
+          "type": {
+            "enum": [
+              "verify_certification",
+              "clarify_date_overlap",
+              "inspect_unreadable_document",
+              "reconsider_after_source_update",
+              "reconcile_failed_move",
+              "general"
+            ]
+          },
+          "criterion_id": { "type": ["string", "null"] },
+          "title": { "type": "string", "maxLength": 300 },
+          "detail": { "type": "string", "maxLength": 2000 }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string", "maxLength": 500 }, "maxItems": 50 }
+  }
+}

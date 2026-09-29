@@ -1,0 +1,40 @@
+# Virtual environments
+.venv/
+venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Fallback temp root used by tests/conftest.py when the system temp
+# directory is unusable (see the module docstring there).
+.pytest-tmp/
+
+# Local runtime state: never commit review databases, extracts, reports,
+# journals, backups, or locks. These contain applicant data (PRD section 20).
+.review/
+review.html
+
+# Real-world resume corpora, fetched on demand by resume/_download.py.
+# These are REAL people's resumes -- names, contact details, employment
+# history. They are an opt-in local corpus only: they are never committed,
+# and the default test run never reads them (see docs/corpus.md).
+# Re-fetch with: python resume/_download.py
+resume/
+
+# Secrets and host configuration
+*.secret
+.env
+.env.*
+
+# Generated releases, deployment copies, and local review evidence
+dist/
+build/
+docs/review-artifacts/
+cloudflare-demo/.wrangler/
+cloudflare-demo/public/
+datasets/
+submission/agent-index/agent_index_client.py
+submission/agent-index/upstream-manifest.json

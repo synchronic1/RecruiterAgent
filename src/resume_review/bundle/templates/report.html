@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en" data-rr-mode="pending">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="referrer" content="no-referrer">
+<title>RecruiterAgent | Resume review</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+PHRpdGxlIGlkPSJ0aXRsZSI+UmVjcnVpdGVyQWdlbnQgY29tcGFjdCBmYXZpY29uPC90aXRsZT48ZGVzYyBpZD0iZGVzYyI+QSBzaW1wbGlmaWVkIGZvbGRlZCBSIGZvciBzbWFsbCBicm93c2VyIHNpemVzLjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwOCIgZmlsbD0iI0Y3RjVFRCIvPgogIDxwYXRoIGQ9Ik0xNDUgNDI0Vjk0aDE0MmM5MCAwIDEzMyA0NyAxMzMgMTE4cy00MyAxMTgtMTMzIDExOEgxNDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBFM0I0NCIgc3Ryb2tlLXdpZHRoPSI3MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgPHBhdGggZD0iTTI4MiA5NGg1YzkwIDAgMTMzIDQ3IDEzMyAxMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBBOUU3MyIgc3Ryb2tlLXdpZHRoPSI3MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgPHBhdGggZD0iTTI4MSAzMzAgNDAyIDQyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMEE5RTczIiBzdHJva2Utd2lkdGg9IjcwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+
+<!--
+  Document shell for the resume-review application (PRD section 8.1).
+
+  The reporting layer deploys this file twice:
+    * connected: served under an authenticated helper URL; state comes from
+      /api/v1/instances/{instance_id}/... and edits are enabled per role.
+    * snapshot: written to the job root as review.html, opened from a file: origin.
+      Everything the snapshot needs is embedded below; the module must make no
+      network request of any kind in that mode (contract section 1).
+
+  Asset paths are relative to this file. The deploy step rewrites the two
+  href/src values below when it relocates the shell to the job root as
+  review.html, because the bundle then lives at .review/app/{templates,assets}.
+
+  The two payload mount points are filled by the reporting layer:
+    #rr-snapshot   <script type="application/json">, content escaped with
+                   security.untrusted.escape_json_for_html  (snapshot mode)
+    #rr-bootstrap  <script type="application/json">, small non-secret bootstrap
+                   record: {mode, instance_id, api_base, role}   (connected mode)
+  report.js reads whichever is populated. It never reads a neighbouring file.
+-->
+
+<a class="rr-skip" href="#rr-table">Skip to submissions</a>
+
+<div class="rr-shell">
+
+  <header class="rr-header" role="banner">
+    <div class="rr-header-main">
+      <div class="rr-brand" role="img" aria-label="RecruiterAgent, evidence-led review, OpenClaw skill">
+        <div class="rr-brand-artwork"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 690 120" class="rr-brand-logo rr-brand-logo-full rr-brand-logo-light" aria-hidden="true" focusable="false"><g transform="translate(12 12) scale(0.1875)">
+  <rect width="512" height="512" rx="108" fill="#F7F5ED"/>
+  <path d="M135 76h142c98 0 157 62 157 151 0 73-44 120-126 145l-63 20v79H135V76Z" fill="#0E3B44"/>
+  <path d="M210 76h68c98 0 156 63 156 151 0 73-44 120-126 145l-48-78c54-16 88-39 88-68 0-42-27-66-71-66h-67V76Z" fill="#0A9E73"/>
+  <path d="M135 76h80l118 93-72 58-126-95V76Z" fill="#102F37"/>
+  <path d="M179 225c34-47 75-71 123-62 48 8 77 35 103 66-38 46-80 70-126 61-47-10-76-38-100-65Z" fill="#F7F5ED"/>
+  <circle cx="286" cy="226" r="25" fill="#E56350"/>
+  <path d="M157 278c17-27 50-35 78-18l182 116c28 18 36 51 18 79-18 28-51 36-79 18L175 357c-28-18-36-51-18-79Z" fill="#0A9E73"/></g><text x="132" y="60" font-family="Segoe UI Variable, Segoe UI, Arial, sans-serif" font-size="44" font-weight="700" letter-spacing="-1.4"><tspan fill="#17373E">Recruiter</tspan><tspan fill="#0A9E73">Agent</tspan></text><text x="134" y="91" fill="#596C70" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="600" letter-spacing="1.5">EVIDENCE-LED REVIEW</text></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 690 120" class="rr-brand-logo rr-brand-logo-full rr-brand-logo-dark" aria-hidden="true" focusable="false"><g transform="translate(12 12) scale(0.1875)">
+  <rect width="512" height="512" rx="108" fill="#F7F5ED"/>
+  <path d="M135 76h142c98 0 157 62 157 151 0 73-44 120-126 145l-63 20v79H135V76Z" fill="#0E3B44"/>
+  <path d="M210 76h68c98 0 156 63 156 151 0 73-44 120-126 145l-48-78c54-16 88-39 88-68 0-42-27-66-71-66h-67V76Z" fill="#0A9E73"/>
+  <path d="M135 76h80l118 93-72 58-126-95V76Z" fill="#102F37"/>
+  <path d="M179 225c34-47 75-71 123-62 48 8 77 35 103 66-38 46-80 70-126 61-47-10-76-38-100-65Z" fill="#F7F5ED"/>
+  <circle cx="286" cy="226" r="25" fill="#E56350"/>
+  <path d="M157 278c17-27 50-35 78-18l182 116c28 18 36 51 18 79-18 28-51 36-79 18L175 357c-28-18-36-51-18-79Z" fill="#0A9E73"/></g><text x="132" y="60" font-family="Segoe UI Variable, Segoe UI, Arial, sans-serif" font-size="44" font-weight="700" letter-spacing="-1.4"><tspan fill="#F7F5ED">Recruiter</tspan><tspan fill="#68E7BB">Agent</tspan></text><text x="134" y="91" fill="#C5D5D1" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="600" letter-spacing="1.5">EVIDENCE-LED REVIEW</text></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 120" class="rr-brand-logo rr-brand-logo-compact rr-brand-logo-light" aria-hidden="true" focusable="false"><g transform="translate(12 12) scale(0.1875)">
+  <rect width="512" height="512" rx="108" fill="#F7F5ED"/>
+  <path d="M135 76h142c98 0 157 62 157 151 0 73-44 120-126 145l-63 20v79H135V76Z" fill="#0E3B44"/>
+  <path d="M210 76h68c98 0 156 63 156 151 0 73-44 120-126 145l-48-78c54-16 88-39 88-68 0-42-27-66-71-66h-67V76Z" fill="#0A9E73"/>
+  <path d="M135 76h80l118 93-72 58-126-95V76Z" fill="#102F37"/>
+  <path d="M179 225c34-47 75-71 123-62 48 8 77 35 103 66-38 46-80 70-126 61-47-10-76-38-100-65Z" fill="#F7F5ED"/>
+  <circle cx="286" cy="226" r="25" fill="#E56350"/>
+  <path d="M157 278c17-27 50-35 78-18l182 116c28 18 36 51 18 79-18 28-51 36-79 18L175 357c-28-18-36-51-18-79Z" fill="#0A9E73"/></g><text x="132" y="73" font-family="Segoe UI Variable, Segoe UI, Arial, sans-serif" font-size="48" font-weight="700" letter-spacing="-1.4"><tspan fill="#17373E">Recruiter</tspan><tspan fill="#0A9E73">Agent</tspan></text></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 120" class="rr-brand-logo rr-brand-logo-compact rr-brand-logo-dark" aria-hidden="true" focusable="false"><g transform="translate(12 12) scale(0.1875)">
+  <rect width="512" height="512" rx="108" fill="#F7F5ED"/>
+  <path d="M135 76h142c98 0 157 62 157 151 0 73-44 120-126 145l-63 20v79H135V76Z" fill="#0E3B44"/>
+  <path d="M210 76h68c98 0 156 63 156 151 0 73-44 120-126 145l-48-78c54-16 88-39 88-68 0-42-27-66-71-66h-67V76Z" fill="#0A9E73"/>
+  <path d="M135 76h80l118 93-72 58-126-95V76Z" fill="#102F37"/>
+  <path d="M179 225c34-47 75-71 123-62 48 8 77 35 103 66-38 46-80 70-126 61-47-10-76-38-100-65Z" fill="#F7F5ED"/>
+  <circle cx="286" cy="226" r="25" fill="#E56350"/>
+  <path d="M157 278c17-27 50-35 78-18l182 116c28 18 36 51 18 79-18 28-51 36-79 18L175 357c-28-18-36-51-18-79Z" fill="#0A9E73"/></g><text x="132" y="73" font-family="Segoe UI Variable, Segoe UI, Arial, sans-serif" font-size="48" font-weight="700" letter-spacing="-1.4"><tspan fill="#F7F5ED">Recruiter</tspan><tspan fill="#68E7BB">Agent</tspan></text></svg></div>
+        <p class="rr-brand-caption">OpenClaw skill</p>
+      </div>
+      <h1 class="rr-title" id="rr-job-title">Resume review</h1>
+      <p class="rr-ident">
+        <span class="rr-ident-item">Instance <code id="rr-instance-id">unknown</code></span>
+        <span class="rr-ident-item">Revision <span id="rr-state-revision">unknown</span></span>
+        <span class="rr-ident-item">Last analysis <span id="rr-last-analysis">unknown</span></span>
+      </p>
+    </div>
+    <div class="rr-header-side">
+      <p class="rr-mode">
+        <span class="rr-badge" id="rr-mode-badge" data-mode="pending">Mode unknown</span>
+        <span class="rr-mode-detail" id="rr-mode-detail">Reading the embedded payload.</span>
+      </p>
+      <p class="rr-health" id="rr-health" role="status">Helper health unknown</p>
+      <p class="rr-theme">
+        <label for="rr-theme">Theme</label>
+        <select id="rr-theme">
+          <option value="auto">Follow system</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </p>
+    </div>
+  </header>
+
+  <p class="rr-callout rr-callout-snapshot" id="rr-snapshot-banner" hidden></p>
+
+  <nav class="rr-workspace-tabs" role="tablist" aria-label="Review workspace">
+    <button type="button" id="rr-tab-candidates" role="tab" aria-selected="true" aria-controls="rr-panel-candidates" data-workspace-tab="candidates">Candidates</button>
+    <button type="button" id="rr-tab-requisition" role="tab" aria-selected="false" aria-controls="rr-panel-requisition" tabindex="-1" data-workspace-tab="requisition">Requisition</button>
+    <button type="button" id="rr-tab-feedback" role="tab" aria-selected="false" aria-controls="rr-panel-feedback" tabindex="-1" data-workspace-tab="feedback">OpenClaw feedback</button>
+  </nav>
+
+  <section class="rr-requisition" id="rr-panel-requisition" role="tabpanel" aria-labelledby="rr-tab-requisition" hidden>
+    <div class="rr-requisition-heading">
+      <div><p class="rr-eyebrow">Role reference</p><h2 id="rr-requisition-heading">Original requisition</h2></div>
+      <span class="rr-badge" id="rr-requisition-badge">Not loaded</span>
+    </div>
+    <p class="rr-hint" id="rr-requisition-summary">Give OpenClaw the job requirements to reference in this folder.</p>
+    <details id="rr-requisition-editor" open>
+      <summary>Add or edit requisition</summary>
+      <form id="rr-requisition-form" class="rr-requisition-form">
+        <div class="rr-requisition-fields">
+          <p class="rr-field"><label for="rr-requisition-title">Role / requisition title</label><input id="rr-requisition-title" maxlength="200" required disabled placeholder="For example: Project Coordinator &mdash; REQ-1042"></p>
+          <p class="rr-field"><label for="rr-requisition-file">Import a text file</label><input id="rr-requisition-file" type="file" accept=".txt,.md,text/plain,text/markdown" disabled aria-describedby="rr-requisition-file-help"><span id="rr-requisition-file-help" class="rr-hint">UTF-8 .txt or .md, up to 80 KB. For PDF or Word, paste the relevant text below.</span></p>
+        </div>
+        <label for="rr-requisition-text">Requisition text / job requirements</label>
+        <textarea id="rr-requisition-text" rows="5" maxlength="20000" required disabled aria-describedby="rr-requisition-help" placeholder="Paste the original responsibilities, required qualifications, and preferred experience here."></textarea>
+        <div class="rr-requisition-source"><label for="rr-requisition-source">Original source link <span class="rr-hint">(optional)</span></label><input id="rr-requisition-source" type="url" maxlength="2048" disabled placeholder="Paste the original posting URL"><p class="rr-hint">The link records the source. OpenClaw uses the saved text; linked pages are not fetched.</p></div>
+        <p id="rr-requisition-help" class="rr-hint">Saved with this job folder and included in OpenClaw chat. Review criteria proposed from it still need human approval.</p>
+        <div class="rr-requisition-actions"><button type="submit" id="rr-requisition-save" class="rr-primary" disabled>Save reference</button><button type="button" id="rr-requisition-reload" disabled>Discard edits / reload saved</button><p id="rr-requisition-status" class="rr-hint" role="status" aria-live="polite">Connect as a reviewer to add a reference.</p></div>
+      </form>
+    </details>
+  </section>
+
+  <section class="rr-feedback" id="rr-panel-feedback" role="tabpanel" aria-labelledby="rr-tab-feedback" hidden>
+    <div class="rr-feedback-intro">
+      <p class="rr-eyebrow">Folder workspace</p>
+      <h2 id="rr-feedback-heading">Feedback for OpenClaw</h2>
+      <p>Ask a question, correct an interpretation, or suggest what to review across this job folder.</p>
+    </div>
+    <form id="rr-feedback-form" class="rr-feedback-form">
+      <label for="rr-feedback-input">Your feedback or instructions</label>
+      <textarea id="rr-feedback-input" rows="3" maxlength="20000" required disabled aria-describedby="rr-feedback-help rr-feedback-status" placeholder="For example: Recheck the evidence for project coordination and tell me where experience is unclear."></textarea>
+      <p id="rr-feedback-help" class="rr-hint">Sends to this folder's OpenClaw conversation now. Criteria changes remain proposals for human approval.</p>
+      <div class="rr-feedback-actions">
+        <button type="submit" id="rr-feedback-send" class="rr-primary" disabled>Send to OpenClaw</button>
+        <p id="rr-feedback-status" class="rr-hint" role="status" aria-live="polite">Connect as a reviewer to send feedback.</p>
+      </div>
+    </form>
+  </section>
+
+  <div id="rr-panel-candidates" role="tabpanel" aria-labelledby="rr-tab-candidates">
+  <div class="rr-overview" aria-label="Candidate overview">
+    <p><span>All candidates</span><strong id="rr-overview-total">&mdash;</strong></p>
+    <p><span>To review</span><strong id="rr-overview-unreviewed">&mdash;</strong></p>
+    <p><span>Keep / advance</span><strong id="rr-overview-keep">&mdash;</strong></p>
+    <p><span>Reject</span><strong id="rr-overview-reject">&mdash;</strong></p>
+    <p><span>On hold</span><strong id="rr-overview-hold">&mdash;</strong></p>
+  </div>
+  <details class="rr-disclosure rr-count-details"><summary>Detailed counts</summary>
+  <section class="rr-counts" id="rr-counts" aria-labelledby="rr-counts-heading">
+    <h2 class="rr-counts-heading" id="rr-counts-heading">Counts</h2>
+
+    <div class="rr-count-group">
+      <h3 class="rr-count-group-heading" id="rr-counts-all-heading">All submissions in this instance</h3>
+      <ul class="rr-kpi-row" aria-labelledby="rr-counts-all-heading">
+        <li class="rr-kpi"><span class="rr-kpi-label">Total</span><span class="rr-kpi-value" id="rr-count-total">unknown</span></li>
+        <li class="rr-kpi"><span class="rr-kpi-label">Processed</span><span class="rr-kpi-value" id="rr-count-processed">unknown</span></li>
+        <li class="rr-kpi"><span class="rr-kpi-label">Unreviewed</span><span class="rr-kpi-value" id="rr-count-unreviewed">unknown</span></li>
+        <li class="rr-kpi" data-state="keep"><span class="rr-kpi-label">Keep</span><span class="rr-kpi-value" id="rr-count-keep">unknown</span></li>
+        <li class="rr-kpi" data-state="reject"><span class="rr-kpi-label">Reject</span><span class="rr-kpi-value" id="rr-count-reject">unknown</span></li>
+        <li class="rr-kpi" data-state="hold"><span class="rr-kpi-label">Hold</span><span class="rr-kpi-value" id="rr-count-hold">unknown</span></li>
+        <li class="rr-kpi" data-state="manual"><span class="rr-kpi-label">Manual review</span><span class="rr-kpi-value" id="rr-count-manual-review">unknown</span></li>
+        <li class="rr-kpi" data-state="pending"><span class="rr-kpi-label">Pending action</span><span class="rr-kpi-value" id="rr-count-pending-action">unknown</span></li>
+        <li class="rr-kpi" data-state="recheck"><span class="rr-kpi-label">Decision needs recheck</span><span class="rr-kpi-value" id="rr-count-needs-recheck">unknown</span></li>
+        <li class="rr-kpi"><span class="rr-kpi-label">Open review tasks</span><span class="rr-kpi-value" id="rr-count-open-tasks">unknown</span></li>
+      </ul>
+    </div>
+
+    <div class="rr-count-group">
+      <h3 class="rr-count-group-heading" id="rr-counts-view-heading">Current view</h3>
+      <ul class="rr-kpi-row" aria-labelledby="rr-counts-view-heading">
+        <li class="rr-kpi"><span class="rr-kpi-label">Matching rows</span><span class="rr-kpi-value" id="rr-count-filtered">unknown</span></li>
+        <li class="rr-kpi"><span class="rr-kpi-label">Rendered on this page</span><span class="rr-kpi-value" id="rr-count-page">unknown</span></li>
+        <li class="rr-kpi"><span class="rr-kpi-label">Omitted by filter</span><span class="rr-kpi-value" id="rr-count-omitted">unknown</span></li>
+        <li class="rr-kpi"><span class="rr-kpi-label">Selected</span><span class="rr-kpi-value" id="rr-count-selected">0</span></li>
+      </ul>
+    </div>
+  </section>
+  </details>
+
+  <section class="rr-toolbar" aria-label="Toolbar">
+    <div class="rr-candidate-toolbar">
+      <p class="rr-field rr-field-search">
+        <label for="rr-search">Find a candidate</label>
+        <input type="search" id="rr-search" autocomplete="off" spellcheck="false" placeholder="Search name, filename, or summary">
+      </p>
+    </div>
+    <details class="rr-disclosure rr-filter-details"><summary id="rr-filter-summary">Filters and tools</summary>
+    <div class="rr-toolbar-row">
+      <p class="rr-field">
+        <label for="rr-filter-location">Location</label>
+        <select id="rr-filter-location">
+          <option value="any">Any location</option>
+          <option value="active">Active</option>
+          <option value="rejected">Rejected</option>
+          <option value="trash">Trash</option>
+          <option value="missing">Missing</option>
+          <option value="conflict">Conflict</option>
+        </select>
+      </p>
+      <p class="rr-field">
+        <label for="rr-filter-processing">Processing state</label>
+        <select id="rr-filter-processing">
+          <option value="any">Any processing state</option>
+          <option value="discovered">Discovered</option>
+          <option value="extracting">Extracting</option>
+          <option value="analyzing">Analyzing</option>
+          <option value="ready">Ready</option>
+          <option value="manual_review">Manual review</option>
+          <option value="error">Error</option>
+          <option value="stale">Stale</option>
+        </select>
+      </p>
+      <p class="rr-field">
+        <label for="rr-filter-review">Reviewer state</label>
+        <select id="rr-filter-review">
+          <option value="any">Any reviewer state</option>
+          <option value="unreviewed">Unreviewed</option>
+          <option value="keep">Keep</option>
+          <option value="reject">Reject</option>
+          <option value="hold">Hold</option>
+        </select>
+      </p>
+      <p class="rr-field">
+        <label for="rr-filter-tasks">Review tasks</label>
+        <select id="rr-filter-tasks">
+          <option value="any">Any task state</option>
+          <option value="attention">Has a task needing attention</option>
+          <option value="open">Has open tasks</option>
+          <option value="none">No open tasks</option>
+        </select>
+      </p>
+      <p class="rr-field">
+        <label for="rr-sort">Sort by</label>
+        <select id="rr-sort">
+          <option value="ingested_at">Ingestion date</option>
+          <option value="original_filename">Original filename</option>
+          <option value="display_name">Display name</option>
+          <option value="processing_state">Processing state</option>
+          <option value="review_state">Reviewer state</option>
+          <option value="open_task_count">Open task count</option>
+          <option value="current_rel_path">Current path</option>
+          <option value="document_id">Document ID</option>
+        </select>
+      </p>
+      <p class="rr-field">
+        <label for="rr-sort-direction">Direction</label>
+        <select id="rr-sort-direction">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </p>
+      <p class="rr-field rr-field-actions">
+        <button type="button" id="rr-clear-filters">Clear filters</button>
+      </p>
+    </div>
+
+    <div class="rr-toolbar-row rr-toolbar-ops">
+      <p class="rr-ops" id="rr-ops-connected">
+        <button type="button" id="rr-btn-refresh">Refresh</button>
+        <button type="button" id="rr-btn-scan">Scan folder</button>
+        <button type="button" id="rr-btn-summarize">Summarize changed items</button>
+        <button type="button" id="rr-btn-actions">Review pending actions</button>
+        <button type="button" id="rr-btn-chat" aria-expanded="false" aria-controls="rr-chat">Candidate questions</button>
+      </p>
+      <p class="rr-ops-note" id="rr-ops-snapshot" hidden>
+        Snapshot mode: scanning, summarizing, chat, and file actions are disabled.
+      </p>
+      <p class="rr-ops-note" id="rr-ops-role"></p>
+    </div>
+    </details>
+
+    <div class="rr-toolbar-row rr-toolbar-selection" aria-label="Bulk selection">
+      <p class="rr-sel-readout">
+        <span id="rr-sel-count">0 selected</span>
+        <span class="rr-sel-hidden" id="rr-sel-hidden">0 hidden by the current filter</span>
+        <span class="rr-sel-note" id="rr-sel-note"></span>
+      </p>
+      <p class="rr-ops">
+        <button type="button" id="rr-btn-select-page">Select this page</button>
+        <button type="button" id="rr-btn-select-matching">Select all matching results</button>
+        <button type="button" id="rr-btn-deselect">Deselect all</button>
+      </p>
+    </div>
+
+    <ul class="rr-chips" id="rr-filter-chips" aria-label="Active filters"></ul>
+  </section>
+
+  <section class="rr-bulk-bar" id="rr-bulk-bar" aria-label="Selected candidate actions" hidden>
+    <div class="rr-bulk-summary">
+      <strong id="rr-bulk-count">No candidates selected</strong>
+      <span id="rr-bulk-scope">Select candidates using the checkboxes below.</span>
+    </div>
+    <div class="rr-bulk-buttons" role="group" aria-label="Set review decision">
+      <button type="button" data-bulk-decision="keep" disabled>Keep / advance</button>
+      <button type="button" data-bulk-decision="reject" disabled>Reject</button>
+      <button type="button" data-bulk-decision="hold" disabled>Hold</button>
+      <button type="button" data-bulk-decision="unreviewed" disabled>Reset review</button>
+    </div>
+    <p id="rr-bulk-status" role="status" aria-live="polite">Decisions apply to the selected candidates. Files stay in place.</p>
+  </section>
+
+  <main class="rr-main" id="rr-main">
+    <div class="rr-table-wrap">
+      <table class="rr-table" id="rr-table">
+        <caption class="rr-caption" id="rr-table-caption">Submissions</caption>
+        <thead>
+          <tr id="rr-head-row"></tr>
+        </thead>
+        <tbody id="rr-rows"></tbody>
+      </table>
+    </div>
+    <p class="rr-empty" id="rr-empty" hidden></p>
+
+    <nav class="rr-pager" id="rr-pager" aria-label="Pagination">
+      <p class="rr-pager-info" id="rr-page-info">No rows</p>
+      <p class="rr-field">
+        <label for="rr-page-size">Rows per page</label>
+        <select id="rr-page-size">
+          <option value="25">25</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </p>
+      <p class="rr-ops">
+        <button type="button" id="rr-btn-prev">Previous page</button>
+        <span class="rr-page-number" id="rr-page-number">Page 1</span>
+        <button type="button" id="rr-btn-next">Next page</button>
+      </p>
+    </nav>
+  </main>
+  </div>
+
+  <footer class="rr-footer">
+    <p class="rr-footer-note">
+      Names are used only to locate and alphabetize records. This page shows no
+      suitability score, rank, or automatic rejection.
+    </p>
+    <p class="rr-footer-note" id="rr-footer-source"></p>
+  </footer>
+</div>
+
+<!-- Document-detail drawer (PRD 8.4). -->
+<aside class="rr-drawer" id="rr-detail" hidden aria-labelledby="rr-detail-title">
+  <div class="rr-drawer-head">
+    <h2 class="rr-drawer-title" id="rr-detail-title">Document detail</h2>
+    <button type="button" class="rr-drawer-close" id="rr-detail-close">Close detail</button>
+  </div>
+  <div class="rr-drawer-body" id="rr-detail-body"></div>
+</aside>
+
+<!-- Page-bound chat (PRD 9). Connected mode only. -->
+<aside class="rr-drawer" id="rr-chat" hidden aria-labelledby="rr-chat-title">
+  <div class="rr-drawer-head">
+    <h2 class="rr-drawer-title" id="rr-chat-title">Ask about this folder</h2>
+    <button type="button" class="rr-drawer-close" id="rr-chat-close">Close chat</button>
+  </div>
+  <div class="rr-drawer-body">
+    <p class="rr-hint">
+      Questions are answered from this folder only. A proposed filter changes the
+      view; it never changes a decision and never moves a file.
+    </p>
+    <ol class="rr-chat-log" id="rr-chat-log"></ol>
+    <form class="rr-chat-form" id="rr-chat-form">
+      <label for="rr-chat-input">Your question</label>
+      <textarea id="rr-chat-input" rows="3" maxlength="20000" required spellcheck="false"></textarea>
+      <p class="rr-ops">
+        <button type="submit" id="rr-chat-send">Ask</button>
+        <button type="button" id="rr-chat-clear">Clear displayed messages</button>
+      </p>
+    </form>
+  </div>
+</aside>
+
+<!-- Action-review drawer (PRD 13.1). Plan, approve, then apply. -->
+<aside class="rr-drawer" id="rr-actions" hidden aria-labelledby="rr-actions-title">
+  <div class="rr-drawer-head">
+    <h2 class="rr-drawer-title" id="rr-actions-title">Pending file actions</h2>
+    <button type="button" class="rr-drawer-close" id="rr-actions-close">Close actions</button>
+  </div>
+  <div class="rr-drawer-body" id="rr-action-body"></div>
+</aside>
+
+<p class="rr-alert" id="rr-alert" role="alert" hidden></p>
+<p class="rr-status" id="rr-status" role="status" aria-live="polite"></p>
+
+<!-- Snapshot payload mount point. The reporting layer fills this element's text
+     with the escaped SNAPSHOT object and removes the connected bootstrap below. -->
+<script id="rr-snapshot" type="application/json" data-report-payload></script>
+
+<!-- Connected bootstrap mount point. Non-secret only: the Gateway credential is
+     never delivered to the browser (PRD 16.2). -->
+<script id="rr-bootstrap" type="application/json" data-report-bootstrap></script>
+
+<p class="rr-callout rr-callout-error" id="rr-module-warning">
+  Loading the review application. If this message stays on screen, the browser
+  blocked the module script. Opening <code>review.html</code> straight from disk
+  can do that, because a <code>file:</code> document has an opaque origin. Serve
+  the folder from the helper and open the connected review page instead.
+</p>
+
+<noscript>
+  <p class="rr-callout rr-callout-error">
+    The review application needs JavaScript to render submissions. Without it the
+    embedded data cannot be displayed.
+  </p>
+</noscript>
+
+<script type="module" src="../assets/report.js"></script>
+
+</body>
+</html>

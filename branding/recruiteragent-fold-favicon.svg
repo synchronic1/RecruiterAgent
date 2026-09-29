@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc"><title id="title">RecruiterAgent compact favicon</title><desc id="desc">A simplified folded R for small browser sizes.</desc>
+  <rect width="512" height="512" rx="108" fill="#F7F5ED"/>
+  <path d="M145 424V94h142c90 0 133 47 133 118s-43 118-133 118H145" fill="none" stroke="#0E3B44" stroke-width="70" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M282 94h5c90 0 133 47 133 118" fill="none" stroke="#0A9E73" stroke-width="70" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M281 330 402 424" fill="none" stroke="#0A9E73" stroke-width="70" stroke-linecap="round"/></svg>

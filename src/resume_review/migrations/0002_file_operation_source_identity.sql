@@ -1,0 +1,30 @@
+-- Migration 0002: bind a source file identity to every file operation.
+--
+-- Authority: PRD section 13.3 (the crash-recovery table) and section 13.2.
+--
+-- Why this column exists
+-- ----------------------
+-- Migration 0001 records a durable per-operation journal (``file_operations``)
+-- with the source path, revision, expected size and expected content hash, but
+-- nothing that identifies the *physical file* the plan was built from. Recovery's
+-- row 2 ("source absent; expected operation-owned destination verified") needs
+-- exactly that: proof that the file now at the destination is the same file the
+-- source used to be, and not a copy another actor placed there.
+--
+-- A same-volume rename preserves the file's identity (its file index on Windows,
+-- st_ino on POSIX). A copy does not: it produces a new file with a new identity.
+-- So the identity captured at plan time is precisely the identity the destination
+-- must present after a genuine move. Size and content hash cannot make that
+-- distinction -- a copy has both -- which is why the verifier refuses to treat
+-- them as ownership evidence.
+--
+-- ``documents.fs_identity`` (0001) is the document's *current* identity, which is
+-- not bound to the operation's ``source_revision``. This per-operation column is
+-- the revision-bound copy of that fact, written once when the plan is persisted.
+--
+-- The value is the same ``volume:inode:size:mtime_ns`` string produced by
+-- ``resume_review.storage.no_clobber.FileIdentity.digest_hint``; NULL means no
+-- identity was available, which recovery must surface as unverified rather than
+-- paper over. This is a diagnostic corroboration, never an authorization input.
+
+ALTER TABLE file_operations ADD COLUMN source_identity TEXT;

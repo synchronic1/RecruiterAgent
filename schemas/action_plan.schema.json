@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-review.local/schemas/action_plan.schema.json",
+  "title": "ActionPlan",
+  "description": "The helper generates and canonicalizes this plan from current committed state. A model-supplied plan is never authoritative, and an unapproved plan confers no authority to move anything. plan_hash is computed over the canonical serialization of every field except plan_hash itself.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "instance_id", "batch_id", "criteria_version", "operations", "plan_hash"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "instance_id": { "type": "string" },
+    "batch_id": { "type": "string" },
+    "criteria_version": { "type": "integer", "minimum": 1 },
+    "created_at": { "type": "string" },
+    "requested_by": { "type": "string", "description": "Non-secret actor reference." },
+    "operations": { "type": "array", "maxItems": 2000, "items": { "$ref": "#/$defs/operation" } },
+    "skipped": { "type": "array", "maxItems": 2000, "items": { "$ref": "#/$defs/skipped" } },
+    "warnings": { "type": "array", "items": { "type": "string" }, "maxItems": 200 },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "move_rejected": { "type": "integer", "minimum": 0 },
+        "restore_active": { "type": "integer", "minimum": 0 },
+        "move_trash": { "type": "integer", "minimum": 0 },
+        "restore_previous": { "type": "integer", "minimum": 0 },
+        "noop": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "needs_recheck": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 over the canonical JSON of the plan with plan_hash removed."
+    }
+  },
+  "$defs": {
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id", "document_id", "kind", "source", "destination",
+        "source_revision", "expected_sha256", "decision_revision",
+        "intent_revision", "location_version"
+      ],
+      "properties": {
+        "operation_id": { "type": "string" },
+        "document_id": { "type": "string" },
+        "kind": { "enum": ["move_rejected", "restore_active", "move_trash", "restore_previous"] },
+        "source": { "type": "string", "description": "Root-relative source path." },
+        "destination": { "type": "string", "description": "Root-relative destination path." },
+        "source_revision": { "type": "integer", "minimum": 1 },
+        "expected_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "expected_size": { "type": ["integer", "null"], "minimum": 0 },
+        "decision_revision": { "type": "integer", "minimum": 0 },
+        "intent_revision": { "type": "integer", "minimum": 0 },
+        "location_version": { "type": "integer", "minimum": 0 },
+        "expected_previous_location": { "type": ["string", "null"] },
+        "origin_batch_id": { "type": ["string", "null"], "description": "For restore_previous: the batch that moved the file into Trash." }
+      }
+    },
+    "skipped": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_id", "reason"],
+      "properties": {
+        "document_id": { "type": "string" },
+        "kind": { "type": ["string", "null"] },
+        "reason": { "type": "string" }
+      }
+    }
+  }
+}

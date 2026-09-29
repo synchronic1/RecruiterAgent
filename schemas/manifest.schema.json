@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-review.local/schemas/manifest.schema.json",
+  "title": "ReleaseManifest",
+  "description": "Integrity manifest for a deployed application bundle. A checksum stored in the same writable folder as the executable it protects is not sufficient. Bootstrap compares the deployed bundle against the trusted copy held in the protected host registry, and refuses to launch on mismatch unless an operator performs a controlled repair (PRD 4, AT-04).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "app_version", "schema_version", "created_at", "files", "bundle_hash"],
+  "properties": {
+    "manifest_version": { "const": "1.0" },
+    "app_version": { "type": "string" },
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "created_at": { "type": "string" },
+    "python_requires": { "type": "string" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "size"],
+        "properties": {
+          "path": { "type": "string", "description": "Bundle-relative path using forward slashes." },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "size": { "type": "integer", "minimum": 0 },
+          "mode": { "type": "string", "enum": ["executable", "asset", "data"] }
+        }
+      }
+    },
+    "bundle_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "sha256 over 'path\\0sha256\\n' lines, sorted by path." }
+  }
+}

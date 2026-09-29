@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resume-review"
+version = "0.1.0"
+description = "Folder-local, evidence-backed resume review workspace with human-approved file organization."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+# Runtime dependencies. Exact tested versions are pinned in requirements.lock;
+# the constraints here express the compatibility envelope derived from that lock.
+dependencies = [
+    "fastapi>=0.141,<0.142",
+    "uvicorn>=0.54,<0.55",
+    "h11>=0.16,<0.17",
+    "pypdf>=6.4,<7",
+    "python-docx>=1.2,<2",
+    "httpx>=0.28,<0.29",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4,<9",
+    "pytest-timeout>=2.4,<3",
+    # Validates the web manifest against its schema in tests/unit/test_web_assets.py.
+    # That check reaches for this through ``pytest.importorskip``, so leaving it
+    # undeclared does not fail a clean install -- it quietly skips the validation
+    # and reports a pass, which is worse than a missing dependency.
+    "jsonschema>=4.26,<5",
+]
+
+[project.scripts]
+resume-review = "resume_review.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+# Presentation assets and schemas live inside the package (not at the repository
+# root) so a non-editable install ships them; the reporting code resolves them
+# through importlib.resources. The repository-root web/ and schemas/ trees remain
+# the development copies.
+#
+# bundle/ is a second, nested copy of the report assets: it is the tree an
+# installed wheel *deploys* (.review/app/), so it keeps the assets/ + templates/
+# layout that report.html's relative links require. templates/* at the top level
+# is the flat set the reporting renderer resolves by name, which is a different
+# consumer with a different shape.
+resume_review = ["templates/*.html", "templates/*.css", "templates/*.js", "bundle/assets/*", "bundle/templates/*", "migrations/*.sql", "schemas/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "live: requires a live, reachable OpenClaw route (not run by default)",
+    "slow: longer-running acceptance fixture tests (deselect with -m 'not slow')",
+    "corpus: opt-in real-corpus suite that reads real people's resumes; never run by default",
+]
+timeout = 300
