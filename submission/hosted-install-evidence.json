@@ -1,0 +1,31 @@
+{
+  "recorded_date": "2026-09-29",
+  "openclaw_version": "2026.9.6",
+  "python_version": "3.12.13",
+  "skill_source_commit": "a49ccfd21c25bdaba914704f8e18db94cb735879",
+  "reporter_source_commit": "134eced604c344560d4306fa0bda49eee69816c0",
+  "skill_installer": {"exit_code": 0, "verify_only_exit_code": 0},
+  "native_skill_discovery": {"eligible": true, "modelVisible": true, "userInvocable": true},
+  "registration": {"exit_code": 0, "agent_id": "recruiteragent"},
+  "dry_run": {"exit_code": 0, "days": 0, "tokens": 0},
+  "manual_report": {"finished_at_ms": 1790723110739, "exit_code": 0, "usage_http_status": 200},
+  "scheduled_report": {"finished_at_ms": 1790723138133, "exit_code": 0, "usage_http_status": 200},
+  "next_scheduled_report": {"finished_at_ms": 1790723438169, "exit_code": 0, "usage_http_status": 200},
+  "observed_schedule_interval_ms": 300036,
+  "report_schedule": "inherited Plow five-minute cycle",
+  "setup_usage_excluded": true,
+  "real_resumes_processed": false,
+  "live_resume_analysis_gate_verified": false,
+  "local_tests": {
+    "command": "python -m pytest tests/unit/test_plow_reporter.py tests/unit/test_submission_preparation.py -q",
+    "result": "13 passed",
+    "coverage": [
+      "test_counts_only_new_engagement_without_setup_or_duplicates",
+      "test_unreadable_or_missing_store_fails_closed",
+      "test_unmapped_usage_cannot_be_reported_as_a_partial_total",
+      "test_inherited_openclaw_argument_maps_to_product_and_preserves_metadata",
+      "test_configuration_preserves_upstream_and_reporting_cutoff",
+      "test_configuration_refuses_to_replace_an_unknown_reporter"
+    ]
+  }
+}

@@ -153,8 +153,15 @@ The public API returned the expected name, blurb, OpenClaw runtime, repository,
 logo, screenshot, and install URL for Agent Index ID `recruiteragent`.
 The listing is at
 [aiworthusing.com/agent-index/recruiteragent](https://aiworthusing.com/agent-index/recruiteragent).
-No video was supplied. Usage reporting, verification, public image publication,
-one-click admission, and live RecruiterAgent engagement remain incomplete.
+The hosted Plow instance now discovers the installed RecruiterAgent skill and
+reports to this listing through its existing five-minute schedule. A manual
+report and an independent scheduled report both received HTTP 200 on 2026-09-29.
+Administrative setup and pre-install usage are excluded. See the
+[hosted installation evidence](hosted-install-evidence.json) and
+[Plow setup guide](plow-openclaw.md) for scope and reproducible commands.
+No real resumes were processed during installation. No video was supplied.
+Verification, public image publication, one-click admission, and live recruiting
+engagement remain incomplete.
 
 After recording the demo, update the listing using your authenticated Plow CLI:
 

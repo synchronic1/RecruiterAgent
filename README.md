@@ -221,8 +221,10 @@ source releases exclude applicant data and downloaded dependencies.
 Agent Index submission materials and reporting setup are in
 [submission/README.md](submission/README.md). RecruiterAgent is
 [registered on the Agent Index](https://aiworthusing.com/agent-index/recruiteragent).
-Live OpenClaw engagement, usage reporting, a demo video, and verification remain
-operator steps. A separate Docker instance can follow the
+The skill and dedicated usage reporter were installed on a hosted Plow OpenClaw
+instance on 2026-09-29. Dependency verification, model discovery, registration,
+and a scheduled report succeeded. Real recruiting engagement, a demo video,
+and hackathon verification remain operator steps. A separate Docker instance can follow the
 [Plow OpenClaw setup guide](submission/plow-openclaw.md).
 
 See [`docs/acceptance-report.md`](docs/acceptance-report.md) for which acceptance

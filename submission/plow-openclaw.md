@@ -98,8 +98,64 @@ account UID, and slug to the Plow admin for initial admission. Registration,
 admission, verification, and prize qualification are separate steps. The demo
 video can be added to the listing later; it is still required for qualification.
 
-This guide has been checked against upstream documentation. A Plow container
-with RecruiterAgent installed has not yet been booted and verified here.
+## Hosted installation checked on 2026-09-29
+
+RecruiterAgent was installed in a running Plow-hosted OpenClaw 2026.9.6 instance.
+An isolated Python 3.12.13 runtime supplies the application's dependencies;
+OpenClaw's existing runtime and other agents were not restarted. The installed
+skill is at `/var/lib/plow/workspace/skills/recruiteragent`. Its installer and
+`--verify-only` check succeeded, and `skills.status` reported `eligible`,
+`modelVisible`, and `userInvocable` as true.
+
+The owner dashboard uses the instance's `https://<instance-uid>.plow.run` URL.
+Without an owner session it redirects to Plow account login. Sign in with the
+phone number or email used to activate Plow and the login code Plow sends.
+CLI activation and dashboard account login are separate credentials. The raw
+`exe.xyz` VM URL can show an exe.dev sign-in page; use Plow's owner dashboard
+instead. Plow's account-authenticated web-launch endpoint also supplies a
+single-use link that establishes the dashboard session.
+
+### Dedicated reporter on the hosted base
+
+The base already schedules reporting every five minutes. The following installer
+preserves its original client and replaces the entry with a narrow launcher
+for `recruiteragent`. Run from a trusted checkout on a dedicated recruiting
+instance after installing the skill:
+
+```bash
+/var/lib/plow/workspace/skills/recruiteragent/.venv/bin/python \
+  submission/install_plow_reporter.py
+python3 /opt/plow/agent-index-client.py --register --agent recruiteragent
+python3 /opt/plow/agent-index-client.py --agent recruiteragent --dry-run
+python3 /opt/plow/agent-index-client.py --agent recruiteragent
+```
+
+Registration uses the base's protected `PLOW_AGENT_TOKEN` environment; never
+put it in source, a URL, or a command argument. The installer checks the exact
+upstream client hash and refuses an unknown version. The original Apache-licensed
+client remains at `/opt/plow/agent-index-client.upstream.py` with its license.
+Report identity and cumulative state stay in the private, persistent
+`/var/lib/plow/recruiteragent-index` directory. Each invocation records only
+its completion time, exit code, mode, and usage endpoint HTTP status in
+`run-events.jsonl`.
+
+The collector reads the hosted OpenClaw SQLite transcript store in read-only
+mode. It counts usage after installation, excludes
+`agent:main:recruiteragent-setup`, deduplicates responses, and disables unrelated
+Codex/Claude/Hermes collectors. This assumes the instance is dedicated to
+RecruiterAgent; future unrelated chats should not run on it. Missing, corrupt,
+or unmapped usage fails closed. It sends token counters, not resume or chat
+content. An empty report does not establish real recruiting engagement.
+
+A manual report and two consecutive scheduled invocations exited zero and
+received HTTP 200. The scheduled completions were five minutes apart. The
+source-only skill and reporter are installed and checked;
+the live resume-analysis adapter gate and a real review task remain unverified.
+Recorded results are in [hosted-install-evidence.json](hosted-install-evidence.json).
+The focused reporter/submission suite passed 13 tests. Rebuilding or replacing
+the upstream image may restore its original reporter entry; reapply the checked
+integration or include it in a tested RecruiterAgent image. A public custom image
+and one-click admission have not been completed.
 
 Sources: [OpenClaw base](https://github.com/plow-pbc/plow-openclaw-agent),
 [Plow CLI](https://github.com/plow-pbc/plow-agents),
