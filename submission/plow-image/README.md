@@ -42,8 +42,9 @@ Plow admin admission after testing from a separate account.
 
 One-click deployment is now enabled for RecruiterAgent: the [public Agent Index
 record](https://agent-index-server.vercel.app/v1/agent?agent_id=recruiteragent)
-reports `deployable_at=2026-09-30T20:48:11.549Z`. The listing still appears
-grey with a WIP badge because its demo video is absent (`has_video=false`).
+reports `deployable_at=2026-09-30T20:48:11.549Z`. The
+[YouTube demo](https://youtu.be/kEkLX1jCYYY) was added to the listing on
+2026-09-30, completing the missing video field.
 The site's [readiness rule](https://aiworthusing.com/assets/agent-status.js)
 requires its approval mark, a video, at least one
 image, and either one-click deployment or an HTTPS install guide. The other

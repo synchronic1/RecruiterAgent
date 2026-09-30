@@ -163,15 +163,15 @@ report and an independent scheduled report both received HTTP 200 on 2026-09-29.
 Administrative setup and pre-install usage are excluded. See the
 [hosted installation evidence](hosted-install-evidence.json) and
 [Plow setup guide](plow-openclaw.md) for scope and reproducible commands.
-No real resumes were processed during installation. No video was supplied.
-Verification, one-click admission, and live recruiting engagement remain
-incomplete. Image publication is complete; see
+No real resumes were processed during the initial installation. One-click
+admission is now enabled. The [YouTube demo](https://youtu.be/kEkLX1jCYYY)
+was added to the public listing on 2026-09-30. Image publication is complete; see
 [publication evidence](plow-image/published-image.json) for the tested scope.
 
 After recording the demo, update the listing using your authenticated Plow CLI:
 
 ```bash
-plow-agents image set recruiteragent --video '{"provider":"youtube","id":"YOUR_11_CHAR_ID","title":"RecruiterAgent demo"}'
+plow-agents image set recruiteragent --video '{"provider":"youtube","id":"kEkLX1jCYYY","title":"RecruiterAgent demo"}'
 ```
 
 Sources: [publish requirements](https://aiworthusing.com/agent-index/publish),
