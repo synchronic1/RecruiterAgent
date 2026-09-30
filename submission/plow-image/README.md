@@ -14,22 +14,23 @@ The published Linux/amd64 build is publicly pullable without registry login.
 Its immutable reference is:
 
 ```text
-ghcr.io/synchronic1/recruiteragent@sha256:128da66388ec2260b0efdc83835fca19ee41890528527f18b8444bf6f1dee36c
+ghcr.io/synchronic1/recruiteragent@sha256:841845e2eedf343ee04c5f3d47a86780b6f053efa8cf366eddf02d5f82256e3f
 ```
 
-It was built from source commit `94698d2b7fcaf1a9e75aa30bb0ce9ce2cdf603c3`.
-The [publishing run](https://github.com/synchronic1/RecruiterAgent/actions/runs/36649761036)
+It was built from source commit `d918a5050d882c9089eb1089fc2198279c9a5234`.
+The [publishing run](https://github.com/synchronic1/RecruiterAgent/actions/runs/36756517226)
 passed application and gateway checks, verified skill discovery, and used
 `plow-agents image push`. An anonymous registry request returned HTTP 200 with
 the expected manifest checksum, and an anonymous Docker pull succeeded.
-Full recorded scope is in [published-image.json](published-image.json).
+Full recorded scope is in [dashboard-image.json](dashboard-image.json). The
+[earlier release record](published-image.json) preserves the previous digest.
 
 With the Plow CLI installed, sign in, select an available phone line, and deploy:
 
 ```bash
 plow-agents login
 plow-agents lines
-plow-agents deploy ghcr.io/synchronic1/recruiteragent@sha256:128da66388ec2260b0efdc83835fca19ee41890528527f18b8444bf6f1dee36c --line YOUR_AVAILABLE_LINE_UID
+plow-agents deploy ghcr.io/synchronic1/recruiteragent@sha256:841845e2eedf343ee04c5f3d47a86780b6f053efa8cf366eddf02d5f82256e3f --line YOUR_AVAILABLE_LINE_UID
 plow-agents agents
 ```
 
@@ -70,7 +71,7 @@ resume-analysis route. Those remain separate deployment checks.
 ## Publish and request one-click deployment
 
 The repository's **Publish Plow RecruiterAgent image** GitHub Actions workflow is
-manually dispatched. It builds from the selected commit, runs both offline
+manually dispatched. It builds from the selected commit, runs all three offline
 checks, and publishes `ghcr.io/synchronic1/recruiteragent:<commit>` using
 `plow-agents image push`. Its job summary and log contain the immutable
 `ghcr.io/synchronic1/recruiteragent@sha256:<digest>` reference. The workflow uses
@@ -110,8 +111,18 @@ review page. The Gateway plugin starts and supervises the loopback helper;
 no additional public port or widget sandbox is needed. The inherited Gateway,
 phone channel and usage reporter remain in place. See
 [ADR 0004](../../docs/adr/0004-hosted-owner-dashboard.md) for the trust boundary.
-The immutable image above is the earlier release; it does not include this
-dashboard update. A newly published digest and separate live test are required.
+The immutable image above includes this dashboard update. A separate live
+installation test is recorded alongside the build checks.
+
+The live test instance is
+[RecruiterAgent dashboard test](https://1fd35ad3110b3bca5a66ea43f4ebc3f6.plow.run/recruiteragent/).
+Sign in as its Plow owner. Its landing page links a three-applicant synthetic
+workspace and the 200-candidate design demo. Owner ingress, connected assets,
+durable scanning, original downloads, and a persisted Keep decision passed.
+Originals remained unchanged. The inherited reporter also delivered actual
+collected usage with HTTP 200. Restricted applicant analysis is not configured;
+phone delivery, recurring reporting cadence and one-click admission require
+their own checks. Existing older instances were left intact.
 
 An additional offline check runs the actual pinned Gateway plugin, service,
 authenticated landing/demo/review/assets, session and CSRF flow, and scan API:

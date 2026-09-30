@@ -770,3 +770,29 @@ The publishing workflow repeats that check on the final built image without
 overlays. This check uses synthetic fixtures and a synthetic trusted proxy;
 it makes no inference call and is not evidence of live Plow ingress or usage
 reporting. Source: ADR 0004. Live installation evidence remains separate.
+
+The final image publishing workflow
+`https://github.com/synchronic1/RecruiterAgent/actions/runs/36756517226` passed
+all three installed-image checks without overlays. The published digest is
+recorded in `submission/plow-image/dashboard-image.json`.
+
+A separate live Plow installation on 2026-09-30 passed owner login, Gateway
+health, protected companion landing and synthetic demo, and the connected
+review page and asset. Through actual owner ingress, a CSRF-less scan was denied
+(403); an authenticated scan returned 202 and its durable job succeeded. Three
+synthetic documents were listed, original bytes matched their setup hashes,
+and a Keep decision persisted while all locations remained active with no
+pending file intent. No applicant inference or file plan was executed. Its
+analysis connection was explicitly unconfigured. Recorded safe result:
+`docs/review-artifacts/live-dashboard-check-20260930.json`. This establishes
+hosted dashboard behavior, not machine authentication for desktop inference,
+phone delivery, usage delivery or one-click admission.
+
+The same install subsequently passed inherited reporter registration/status and
+dry-run collection (exit 0, no collector failure). A normal inherited reporter
+pass using its actual collected usage returned HTTP 200 and exit 0. Safe result:
+`docs/review-artifacts/reporter-delivery-check-20260930.json`. No fabricated
+usage, replacement client or manual usage payload was used. This verifies one
+delivery from this owner install; recurring five-minute delivery and another
+account's install remain separate checks. The upstream reporting schedule and
+client were preserved unchanged.

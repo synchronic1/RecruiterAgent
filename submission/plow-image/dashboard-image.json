@@ -1,0 +1,41 @@
+{
+  "agent_id": "recruiteragent",
+  "image": "ghcr.io/synchronic1/recruiteragent@sha256:841845e2eedf343ee04c5f3d47a86780b6f053efa8cf366eddf02d5f82256e3f",
+  "source_commit": "d918a5050d882c9089eb1089fc2198279c9a5234",
+  "published_date_utc": "2026-09-30",
+  "build_workflow": "https://github.com/synchronic1/RecruiterAgent/actions/runs/36756517226",
+  "previous_image": "ghcr.io/synchronic1/recruiteragent@sha256:128da66388ec2260b0efdc83835fca19ee41890528527f18b8444bf6f1dee36c",
+  "checks": {
+    "deterministic_suite": "1137 passed, 15 skipped",
+    "installed_application_smoke": "passed",
+    "inherited_gateway_probe_and_skill_discovery": "passed",
+    "installed_gateway_companion_probe": "passed",
+    "anonymous_registry_manifest_http_status": 200,
+    "manifest_sha256_verified": true,
+    "synthetic_demo_candidates": 200,
+    "applicant_data_in_image": false,
+    "inference_performed_by_checks": false
+  },
+  "live_test": {
+    "instance_id": "1fd35ad3110b3bca5a66ea43f4ebc3f6",
+    "status": "running",
+    "companion_url": "https://1fd35ad3110b3bca5a66ea43f4ebc3f6.plow.run/recruiteragent/",
+    "owner_ingress_verified": true,
+    "usage_delivery_verified": true,
+    "restricted_analysis_configured": false,
+    "one_click_admission_confirmed": false,
+    "connected_page_assets_verified": true,
+    "durable_scan_completed": true,
+    "synthetic_documents": 3,
+    "keep_decision_persisted": true,
+    "originals_unchanged": true,
+    "csrf_less_mutation_rejected": true,
+    "file_plan_executed": false,
+    "workspace_instance_id": "inst_73008aa14a604d22806395c6117f1701",
+    "index_registered": true,
+    "inherited_reporter_dry_run_exit": 0,
+    "inherited_reporter_exit": 0,
+    "index_usage_http_status": 200,
+    "scheduled_reporting_cadence_verified": false
+  }
+}
