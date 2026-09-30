@@ -23,7 +23,7 @@
     "owner_ingress_verified": true,
     "usage_delivery_verified": true,
     "restricted_analysis_configured": false,
-    "one_click_admission_confirmed": false,
+    "one_click_admission_confirmed": true,
     "connected_page_assets_verified": true,
     "durable_scan_completed": true,
     "synthetic_documents": 3,

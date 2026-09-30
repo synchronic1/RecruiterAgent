@@ -40,6 +40,17 @@ returned for your instance and your Plow account login. Each installation needs
 its own persistent `/var/lib/plow` state. The one-click button still requires
 Plow admin admission after testing from a separate account.
 
+One-click deployment is now enabled for RecruiterAgent: the [public Agent Index
+record](https://agent-index-server.vercel.app/v1/agent?agent_id=recruiteragent)
+reports `deployable_at=2026-09-30T20:48:11.549Z`. The listing still appears
+grey with a WIP badge because its demo video is absent (`has_video=false`).
+The site's [readiness rule](https://aiworthusing.com/assets/agent-status.js)
+requires its approval mark, a video, at least one
+image, and either one-click deployment or an HTTPS install guide. The other
+fields are present. GitHub sign-in on the listing is for comments and does not
+control this WIP styling. Its separate public builder name is currently blank;
+that name is resolved from the owner's Plow profile.
+
 ## Build and test locally
 
 Run from a clean trusted repository checkout on a Linux Docker host:
