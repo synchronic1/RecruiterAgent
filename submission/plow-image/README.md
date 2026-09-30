@@ -46,6 +46,12 @@ checks, and publishes `ghcr.io/synchronic1/recruiteragent:<commit>` using
 its short-lived package credential; no personal credential is baked into the
 image. For a manual publish, authenticate Docker to your registry and run:
 
+The workflow defaults to GitHub's `ubuntu-24.04` builder. If ECR rate-limits that
+builder, select `recruiteragent-image-builder` only after registering a private,
+single-job ephemeral Linux runner with that label. No permanent runner is needed;
+GitHub de-registers it after the job. Registry login uses a private job-specific
+Docker configuration and is cleared at the end.
+
 ```bash
 plow-agents image push ghcr.io/synchronic1/recruiteragent:v1
 plow-agents profile --show

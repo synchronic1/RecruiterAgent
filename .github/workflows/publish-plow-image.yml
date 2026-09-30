@@ -2,6 +2,14 @@ name: Publish Plow RecruiterAgent image
 
 on:
   workflow_dispatch:
+    inputs:
+      builder:
+        description: Linux Docker builder (private runner must already be online)
+        type: choice
+        default: ubuntu-24.04
+        options:
+          - ubuntu-24.04
+          - recruiteragent-image-builder
 
 permissions:
   contents: read
@@ -9,8 +17,10 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ inputs.builder }}
     timeout-minutes: 30
+    env:
+      DOCKER_CONFIG: ${{ runner.temp }}/recruiteragent-registry
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -29,9 +39,13 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE: ghcr.io/synchronic1/recruiteragent
         run: |
+          mkdir -p "$DOCKER_CONFIG"
+          chmod 700 "$DOCKER_CONFIG"
           printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           curl --fail --silent --show-error --location https://raw.githubusercontent.com/plow-pbc/plow-agents/3033a59754067bb21b4b6b2844967db343ecf7bd/bin/plow-agents --output /tmp/plow-agents
           echo '709a9ecda03b31575f0e5fb3b5fd16314aec01a36408996dccdbcfb83aa54c7b  /tmp/plow-agents' | sha256sum --check
           python3 /tmp/plow-agents image push "$IMAGE:$GITHUB_SHA" | tee /tmp/image-reference.txt
           printf '\nPublished image: `%s`\n' "$(tail -n 1 /tmp/image-reference.txt)" >> "$GITHUB_STEP_SUMMARY"
-          docker logout ghcr.io
+      - name: Remove job registry credential
+        if: always()
+        run: docker logout ghcr.io
