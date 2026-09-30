@@ -1,0 +1,42 @@
+{
+  "agent_id": "recruiteragent",
+  "image": "ghcr.io/synchronic1/recruiteragent@sha256:128da66388ec2260b0efdc83835fca19ee41890528527f18b8444bf6f1dee36c",
+  "source_commit": "94698d2b7fcaf1a9e75aa30bb0ce9ce2cdf603c3",
+  "published_at_utc": "2026-09-30T00:26:49Z",
+  "build_workflow": "https://github.com/synchronic1/RecruiterAgent/actions/runs/36649761036",
+  "base_image": "public.ecr.aws/e1h7x4a2/plow-cloud-agents@sha256:a7eff7b694a2f7a682f5dd2e5593596fd5fed5229e0410301ea817939383cdd4",
+  "platform": "linux/amd64",
+  "openclaw_version": "2026.9.6",
+  "python_version": "3.12.13",
+  "runtime_user": "node",
+  "inherited_entrypoint": ["tini", "-s", "--"],
+  "inherited_command": ["node", "/opt/plow/boot/main.js"],
+  "inherited_reporter_sha256": "5be521644ade0f041e83370ac457edc8ad85410e14265f1b1243807772de9a5b",
+  "inherited_reporter_schedule": "five minutes",
+  "checks": {
+    "application_smoke": "passed",
+    "application_smoke_script": "submission/plow-image/smoke.py",
+    "application_operations": ["setup", "scan", "status", "render", "repeat_setup"],
+    "gateway_probe": "PLOW_PROBE_OK",
+    "gateway_smoke_script": "submission/plow-image/smoke.py --gateway",
+    "skill_eligible": true,
+    "skill_model_visible": true,
+    "originals_unchanged": true,
+    "synthetic_preview_resumes": 200,
+    "inference_performed": false,
+    "plow_token_baked_in": false,
+    "gateway_token_baked_in": false,
+    "anonymous_docker_pull": "passed",
+    "fresh_anonymous_registry_manifest_http_status": 200,
+    "manifest_sha256_verified": true,
+    "ephemeral_publisher_exited": true,
+    "ephemeral_publisher_credentials_removed": true
+  },
+  "limitations": {
+    "separate_account_cloud_install_tested": false,
+    "new_image_live_phone_engagement_tested": false,
+    "live_resume_analysis_gate_verified": false,
+    "one_click_admission_confirmed": false,
+    "hackathon_verification_confirmed": false
+  }
+}

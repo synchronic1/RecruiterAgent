@@ -160,8 +160,10 @@ the live resume-analysis adapter gate and a real review task remain unverified.
 Recorded results are in [hosted-install-evidence.json](hosted-install-evidence.json).
 The focused reporter/submission suite passed 13 tests. Rebuilding or replacing
 the upstream image may restore its original reporter entry; reapply the checked
-integration or include it in a tested RecruiterAgent image. A public custom image
-and one-click admission have not been completed.
+integration or use the [published RecruiterAgent image](plow-image/README.md).
+That variant passed offline application and gateway checks and is publicly
+pullable. One-click admission and a separate-account cloud install test remain
+pending.
 
 Sources: [OpenClaw base](https://github.com/plow-pbc/plow-openclaw-agent),
 [Plow CLI](https://github.com/plow-pbc/plow-agents),

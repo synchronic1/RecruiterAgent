@@ -8,6 +8,37 @@ synthetic PDFs are included. No applicant corpus, host credentials, databases,
 or host virtual environments enter the build context. Dependencies are fetched
 from the existing requirements files during the image build.
 
+## Install the published image on Plow
+
+The published Linux/amd64 build is publicly pullable without registry login.
+Its immutable reference is:
+
+```text
+ghcr.io/synchronic1/recruiteragent@sha256:128da66388ec2260b0efdc83835fca19ee41890528527f18b8444bf6f1dee36c
+```
+
+It was built from source commit `94698d2b7fcaf1a9e75aa30bb0ce9ce2cdf603c3`.
+The [publishing run](https://github.com/synchronic1/RecruiterAgent/actions/runs/36649761036)
+passed application and gateway checks, verified skill discovery, and used
+`plow-agents image push`. An anonymous registry request returned HTTP 200 with
+the expected manifest checksum, and an anonymous Docker pull succeeded.
+Full recorded scope is in [published-image.json](published-image.json).
+
+With the Plow CLI installed, sign in, select an available phone line, and deploy:
+
+```bash
+plow-agents login
+plow-agents lines
+plow-agents deploy ghcr.io/synchronic1/recruiteragent@sha256:128da66388ec2260b0efdc83835fca19ee41890528527f18b8444bf6f1dee36c --line YOUR_AVAILABLE_LINE_UID
+plow-agents agents
+```
+
+Text the chosen phone number: "Use RecruiterAgent to help set up a resume review."
+The first owner message starts onboarding. Use the actual Plow dashboard link
+returned for your instance and your Plow account login. Each installation needs
+its own persistent `/var/lib/plow` state. The one-click button still requires
+Plow admin admission after testing from a separate account.
+
 ## Build and test locally
 
 Run from a clean trusted repository checkout on a Linux Docker host:
@@ -58,9 +89,9 @@ plow-agents image push ghcr.io/synchronic1/recruiteragent:v1
 plow-agents profile --show
 ```
 
-GitHub Container Registry packages initially have private visibility, even when
-the source repository is public. Change the package to **Public** in its package
-settings, then check an unauthenticated pull of the exact digest. Plow must be
+Check GitHub Container Registry package visibility explicitly; new packages can
+be private even when the source repository is public. Set **Public** if needed,
+then check an unauthenticated pull of the exact digest. Plow must be
 able to pull without your registry login. Post the digest, slug `recruiteragent`,
 source commit, repository URL, and Plow account UID in the **Request 1 Click
 Deploy** Discord thread. An admin tests the image from another account and admits

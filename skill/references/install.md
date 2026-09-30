@@ -1,5 +1,10 @@
 # RecruiterAgent source installation
 
+For a Plow-hosted instance with RecruiterAgent and its dependencies already
+installed, use the [published image guide](https://github.com/synchronic1/RecruiterAgent/blob/main/submission/plow-image/README.md).
+It includes the immutable image digest, install commands, and recorded checks.
+The instructions below install the source skill into an existing OpenClaw.
+
 ## Prepare the package from a repository checkout
 
 ```powershell

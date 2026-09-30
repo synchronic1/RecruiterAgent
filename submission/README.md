@@ -146,7 +146,11 @@ image with RecruiterAgent installed. A source archive or reporting-only image is
 not a deployable agent. Push a public image using `plow-agents image push`, obtain
 your UID with `plow-agents profile --show`, and give the UID, slug, and printed
 image reference to an admin in [Discord](https://aiworthusing.com/discord).
-Future verified image updates can use `--promote recruiteragent`.
+Future verified image updates can use `--promote recruiteragent`. A complete
+RecruiterAgent variant has now been built, checked, and published with anonymous
+pull access. Its exact digest, source commit, and install commands are in
+[the image guide](plow-image/README.md). Post that digest in **Request 1 Click
+Deploy** for the admin's separate-account test; no request has been sent here.
 
 RecruiterAgent was registered on 2026-09-29 using Plow's account identity flow.
 The public API returned the expected name, blurb, OpenClaw runtime, repository,
@@ -160,8 +164,9 @@ Administrative setup and pre-install usage are excluded. See the
 [hosted installation evidence](hosted-install-evidence.json) and
 [Plow setup guide](plow-openclaw.md) for scope and reproducible commands.
 No real resumes were processed during installation. No video was supplied.
-Verification, public image publication, one-click admission, and live recruiting
-engagement remain incomplete.
+Verification, one-click admission, and live recruiting engagement remain
+incomplete. Image publication is complete; see
+[publication evidence](plow-image/published-image.json) for the tested scope.
 
 After recording the demo, update the listing using your authenticated Plow CLI:
 

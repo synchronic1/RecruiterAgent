@@ -226,6 +226,10 @@ instance on 2026-09-29. Dependency verification, model discovery, registration,
 and a scheduled report succeeded. Real recruiting engagement, a demo video,
 and hackathon verification remain operator steps. A separate Docker instance can follow the
 [Plow OpenClaw setup guide](submission/plow-openclaw.md).
+The [published Plow image](submission/plow-image/README.md) includes the skill,
+application, dependencies, and 200 synthetic demo resumes. Its application and
+gateway checks passed, and anonymous pull access was verified. Admin admission
+for one-click deployment remains pending.
 
 See [`docs/acceptance-report.md`](docs/acceptance-report.md) for which acceptance
 tests pass with recorded evidence, which are implemented but not yet verified, and
