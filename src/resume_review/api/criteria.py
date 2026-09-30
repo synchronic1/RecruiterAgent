@@ -40,7 +40,7 @@ from ..auth import require_role
 from ..db import RevisionConflict
 from ..errors import Code, Forbidden
 from ..models import Role
-from .deps import InstanceContext, get_request_id, require_mutation
+from .deps import InstanceContext, get_request_id, require_mutation, require_operation
 from .envelope import ok_response
 from .idempotency import IdempotencyGuard, idempotency_guard
 
@@ -97,6 +97,26 @@ def _proposal_view(criterion: Any) -> dict[str, Any]:
 
 
 def register(router: APIRouter) -> None:
+    @router.get("/criteria", name="get_criteria", response_class=JSONResponse)
+    def get_criteria(
+        ctx: InstanceContext = Depends(require_operation(Role.VIEWER)),
+        request_id: str = Depends(get_request_id),
+    ):
+        pending = ctx.db.scalar(
+            "SELECT MAX(version) FROM criteria WHERE instance_id = ? AND approved_at IS NULL",
+            (ctx.instance_id,),
+        )
+        proposals = ctx.repository.list_criteria(int(pending), approved_only=False) if pending else []
+        return ok_response(
+            {
+                "active_version": ctx.repository.active_criteria_version(),
+                "active": [_proposal_view(item) for item in ctx.repository.list_criteria()],
+                "pending_version": int(pending) if pending else None,
+                "proposals": [_proposal_view(item) for item in proposals],
+            },
+            request_id=request_id, instance_id=ctx.instance_id, state_revision=ctx.state_revision,
+        )
+
     @router.post("/criteria/proposals", name="criteria_proposals", response_class=JSONResponse)
     def propose_criteria(
         payload: ProposalRequest,

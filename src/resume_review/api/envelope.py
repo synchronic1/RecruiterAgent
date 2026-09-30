@@ -432,7 +432,7 @@ def accepted_response(
 # ---------------------------------------------------------------------------
 # Schema conformance
 # ---------------------------------------------------------------------------
-_SCHEMA_PATH = Path(__file__).resolve().parents[3] / "schemas" / "api_envelope.schema.json"
+_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schemas" / "api_envelope.schema.json"
 _SCHEMA_CACHE: dict[str, Any] = {}
 
 

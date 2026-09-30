@@ -20,6 +20,12 @@ and review edits stay in the browser tab; it is not a live OpenClaw connection.
 The installable product provides a connected helper and restricted analysis
 adapter. Live OpenClaw engagement still requires operator setup and verification.
 
+For desktop folders paired with a hosted agent, see the
+[desktop companion guide](docs/desktop-companion.md). The local helper now serves
+the authenticated dashboard and drives outbound scan, analysis, and chat jobs.
+Hosted access requires an approved connection profile and a machine-authenticated
+restricted analysis API; the Plow browser dashboard alone is not that connection.
+
 ## Companion app screenshots
 
 The screenshots below show the Fold branding in the local synthetic preview.
@@ -230,6 +236,12 @@ The [published Plow image](submission/plow-image/README.md) includes the skill,
 application, dependencies, and 200 synthetic demo resumes. Its application and
 gateway checks passed, and anonymous pull access was verified. Admin admission
 for one-click deployment remains pending.
+
+The hosted dashboard update serves `/recruiteragent/` through the existing
+owner-authenticated Plow Gateway and starts its local helper automatically.
+This full browser page avoids the unavailable widget preview sandbox. It
+requires the updated image; the earlier published digest remains documented
+separately. Analysis still needs an explicitly approved restricted route.
 
 See [`docs/acceptance-report.md`](docs/acceptance-report.md) for which acceptance
 tests pass with recorded evidence, which are implemented but not yet verified, and

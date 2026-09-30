@@ -16,7 +16,7 @@ def build(output: Path) -> Path:
     output.mkdir(parents=True)
     build_skill(output / "skills/recruiteragent")
     source = ROOT / "submission/plow-image"
-    for name in ("Dockerfile", ".dockerignore", "install_runtime.py", "smoke.py", "prompt.md"):
+    for name in ("Dockerfile", ".dockerignore", "install_runtime.py", "smoke.py", "prompt.md", "companion.mjs", "hosted_probe.mjs"):
         path = source / name
         if not path.is_file() or path.is_symlink():
             raise ValueError("Missing or symlinked image source: " + name)

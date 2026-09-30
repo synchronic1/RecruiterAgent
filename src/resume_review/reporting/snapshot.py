@@ -404,6 +404,7 @@ def render_snapshot(
         '<p id="rr-health" class="rr-hint"></p>',
         '<p id="rr-alert" class="rr-alert" role="alert" hidden></p>',
         '<p id="rr-status" class="rr-status" role="status" aria-live="polite"></p>',
+        '<p id="rr-connection-status" class="rr-status" role="status" hidden></p>',
         '<p class="connected-note">',
         _connected_anchor(connected_url),
         " Edits, chat, scan, and file actions are disabled in a saved snapshot.",
@@ -435,6 +436,12 @@ def render_snapshot(
         '<button type="button" id="rr-requisition-reload" disabled>Discard edits / reload saved</button>'
         '<p id="rr-requisition-status" role="status" aria-live="polite">Read-only snapshot.</p>'
         '</div></form></details></section>',
+        '<div id="rr-criteria-editor" hidden><ul id="rr-criteria-draft-list"></ul>'
+        '<form id="rr-criteria-draft-form"><textarea id="rr-criteria-input" disabled></textarea>'
+        '<button id="rr-criteria-propose" disabled>Save criteria draft</button>'
+        '<button id="rr-criteria-approve" disabled>Approve displayed draft</button>'
+        '<button id="rr-criteria-reload" disabled>Reload criteria</button></form>'
+        '<p id="rr-criteria-status">Criteria editing is unavailable in a saved snapshot.</p></div>',
         '<section class="rr-feedback" id="rr-panel-feedback" role="tabpanel" aria-labelledby="rr-tab-feedback" hidden>'
         '<div class="rr-feedback-intro"><p class="rr-eyebrow">Folder workspace</p>'
         '<h2 id="rr-feedback-heading">Feedback for OpenClaw</h2>'

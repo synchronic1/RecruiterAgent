@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "instance_id": "REPLACE_WITH_SETUP_INSTANCE_ID",
+  "base_url": "https://REPLACE_WITH_MACHINE_AUTHENTICATED_API_ORIGIN",
+  "agent_id": "recruiter-analysis",
+  "secret_file": "C:\\Users\\YOUR_USER\\AppData\\Local\\RecruiterAgent\\connections\\gateway-secret.txt",
+  "provider_label": "REPLACE_WITH_APPROVED_PROVIDER_AND_POLICY_REFERENCE",
+  "privacy_approved": false,
+  "timeout_seconds": 60,
+  "attestation": {
+    "attested_by": "REPLACE_WITH_OPERATOR",
+    "attested_at": "2026-09-29T00:00:00+00:00",
+    "no_shell": false,
+    "no_write_or_edit": false,
+    "no_browser_control": false,
+    "no_messaging": false,
+    "no_credential_read": false,
+    "no_unrestricted_file_read": false,
+    "no_cross_session": false,
+    "no_agent_spawning": false,
+    "trusted_instruction_workspace": false
+  }
+}

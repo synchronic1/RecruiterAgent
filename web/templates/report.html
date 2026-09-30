@@ -36,6 +36,7 @@
 <a class="rr-skip" href="#rr-table">Skip to submissions</a>
 
 <div class="rr-shell">
+  <p id="rr-connection-status" class="rr-status" role="status" hidden>Checking the analysis connection...</p>
 
   <header class="rr-header" role="banner">
     <div class="rr-header-main">
@@ -122,6 +123,21 @@
         <p id="rr-requisition-help" class="rr-hint">Saved with this job folder and included in OpenClaw chat. Review criteria proposed from it still need human approval.</p>
         <div class="rr-requisition-actions"><button type="submit" id="rr-requisition-save" class="rr-primary" disabled>Save reference</button><button type="button" id="rr-requisition-reload" disabled>Discard edits / reload saved</button><p id="rr-requisition-status" class="rr-hint" role="status" aria-live="polite">Connect as a reviewer to add a reference.</p></div>
       </form>
+    </details>
+    <details id="rr-criteria-editor" hidden>
+      <summary>Review and approve screening criteria</summary>
+      <p class="rr-hint">Add requirements from the requisition, one per line. Draft criteria are used for analysis only after your approval. Earlier approved criteria stay in the set.</p>
+      <ul id="rr-criteria-draft-list"></ul>
+      <form id="rr-criteria-draft-form" class="rr-requisition-form">
+        <label for="rr-criteria-input">Additional review requirements</label>
+        <textarea id="rr-criteria-input" rows="4" maxlength="80000" required disabled></textarea>
+        <div class="rr-requisition-actions">
+          <button type="submit" id="rr-criteria-propose" disabled>Save criteria draft</button>
+          <button type="button" id="rr-criteria-approve" disabled>Approve displayed draft</button>
+          <button type="button" id="rr-criteria-reload">Reload criteria</button>
+        </div>
+      </form>
+      <p id="rr-criteria-status" class="rr-hint" role="status">Start the local companion to manage criteria.</p>
     </details>
   </section>
 

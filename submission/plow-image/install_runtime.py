@@ -41,6 +41,21 @@ def main():
     prompt = Path("/opt/plow/prompt/AGENTS.md")
     with prompt.open("a", encoding="utf-8") as stream:
         stream.write("\n\n" + (ROOT / "prompt.md").read_text(encoding="utf-8") + "\n")
+    marker = "  registerFull(api) {"
+    for name, expected, relative in (
+        ("index.ts", "f4141a4a810f5ad2643b80664e36b050eff12eb01a3658f5421740f13a7b803d", "./recruiteragent.mjs"),
+        ("dist/index.js", "146b8f3fdc71acf8f9b5375139a59dac0adf80ed2b042cbdd5709a6376d0daa4", "../recruiteragent.mjs"),
+    ):
+        entry = Path("/opt/plow/plugin") / name
+        if hashlib.sha256(entry.read_bytes()).hexdigest() != expected:
+            raise ValueError("Pinned Plow plugin checksum mismatch")
+        text = entry.read_text(encoding="utf-8")
+        if text.count(marker) != 1:
+            raise ValueError("Unexpected pinned Plow plugin registration contract")
+        entry.write_text(f'import {{ registerCompanion }} from "{relative}";\n' + text.replace(
+            marker, marker + '\n    if (api.registrationMode === "full") registerCompanion(api);', 1,
+        ), encoding="utf-8")
+    Path("/opt/plow/plugin/recruiteragent.mjs").write_bytes((ROOT / "companion.mjs").read_bytes())
     print("RecruiterAgent runtime, dependencies, and synthetic preview installed")
 
 

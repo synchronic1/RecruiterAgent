@@ -10,7 +10,7 @@ LABEL org.opencontainers.image.title="RecruiterAgent" \
 
 USER root
 COPY skills/recruiteragent /opt/plow/skills/recruiteragent
-COPY install_runtime.py smoke.py prompt.md /opt/recruiteragent/
+COPY install_runtime.py smoke.py prompt.md companion.mjs hosted_probe.mjs /opt/recruiteragent/
 RUN python3 /opt/recruiteragent/install_runtime.py
 RUN chmod -R a+rX /opt/plow/skills/recruiteragent /opt/recruiteragent
 
@@ -18,6 +18,7 @@ ENV AGENT_ID=recruiteragent \
     AGENT_NAME=RecruiterAgent \
     AGENT_BLURB="Cut through high volumes of applications with agentic AI and evidence-backed review, curated by humans." \
     AGENT_RUNTIME=OpenClaw \
+    RESUME_REVIEW_REGISTRY_DIR=/var/lib/plow/recruiteragent/registry \
     PATH="/opt/plow/skills/recruiteragent/.venv/bin:${PATH}" \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1

@@ -145,6 +145,8 @@ class AdapterConfig:
     #: Injected transport, used only by tests. Never set in production: the probe
     #: reports such a call as non-live so a mock can never pass the PRD 14.3 gate.
     transport: httpx.AsyncBaseTransport | None = field(default=None, repr=False, compare=False)
+    #: Explicit operator approval for one hosted HTTPS origin (ADR 0003).
+    approved_https_origin: str | None = None
 
     def __post_init__(self) -> None:
         if not _AGENT_ID_RE.match(self.agent_id or ""):
@@ -168,7 +170,20 @@ class AdapterConfig:
                 http_status=422,
                 detail={"route": str(self.route_policy.route.value)},
             )
-        if classification == "global":
+        if self.approved_https_origin is not None:
+            if (
+                scheme != "https"
+                or self.route_policy.is_local_only
+                or self.route_policy.route is not ModelRoute.APPROVED_PROVIDER
+                or self.approved_https_origin != self.endpoint_label
+            ):
+                raise _fail(
+                    "Hosted access requires the exact approved HTTPS origin and an approved-provider route.",
+                    Code.ROUTE_POLICY_VIOLATION,
+                    http_status=422,
+                    detail={"reason": "hosted_origin_not_approved"},
+                )
+        if classification == "global" and self.approved_https_origin is None:
             raise _fail(
                 "The OpenClaw endpoint resolves to a public address; keep it on loopback or private ingress.",
                 Code.ROUTE_POLICY_VIOLATION,
@@ -270,6 +285,7 @@ class AdapterConfig:
             "max_request_bytes": self.max_request_bytes,
             "secret_source": "inline" if self.secret is not None else "protected_file",
             "injected_transport": self.transport is not None,
+            "hosted_https_approved": self.approved_https_origin is not None,
             "route_policy": self.route_policy.describe(),
         }
 
@@ -453,6 +469,8 @@ async def probe_route(
         async with httpx.AsyncClient(
             transport=effective_transport,
             timeout=httpx.Timeout(float(config.timeout_seconds)),
+            follow_redirects=False,
+            trust_env=False,
         ) as client:
             response = await client.get(
                 config.models_url(),
@@ -673,6 +691,7 @@ class OpenClawAdapter:
             transport=self._config.transport,
             timeout=httpx.Timeout(float(self._config.timeout_seconds)),
             follow_redirects=False,
+            trust_env=False,
         ) as client:
             return await client.post(
                 self._config.chat_completions_url(),

@@ -20,7 +20,7 @@ def package_files() -> dict[str, Path]:
     allowed = {"src": {".py", ".html", ".css", ".js", ".json", ".sql"},
                "web": {".html", ".css", ".js"},
                "branding": {".svg", ".png", ".md"},
-               "schemas": {".json"}, "migrations": {".sql"}}
+               "schemas": {".json"}, "migrations": {".sql"}, "examples": {".json"}}
     for folder, extensions in allowed.items():
         for path in (ROOT / folder).rglob("*"):
             if path.is_file() and path.suffix in extensions and not any(

@@ -2523,7 +2523,80 @@ function readJsonSlot(id) {
   return element.textContent || "";
 }
 
+async function loadDesktopCriteria() {
+  if (DOM.state.mode !== "connected") return;
+  try {
+    const envelope = await apiRequest("GET", "/criteria");
+    const data = envelope.data;
+    DOM.state.criteriaDraft = { ...data, expected_revision: envelope.state_revision };
+    const list = byId("rr-criteria-draft-list");
+    if (list) {
+      list.replaceChildren();
+      for (const criterion of data.active || []) list.appendChild(make("li", null, `Approved: ${criterion.definition}`));
+      for (const criterion of data.proposals || []) list.appendChild(make("li", null, `Draft: ${criterion.definition}`));
+    }
+    const editable = canEditReview();
+    if (byId("rr-criteria-input")) byId("rr-criteria-input").disabled = !editable;
+    if (byId("rr-criteria-propose")) byId("rr-criteria-propose").disabled = !editable;
+    if (byId("rr-criteria-approve")) byId("rr-criteria-approve").disabled = !editable || !data.pending_version;
+    setText(byId("rr-criteria-status"), data.pending_version ? "Review the displayed draft before approving it." : data.active_version ? "Approved criteria are ready for analysis." : "Add and approve criteria before analyzing candidates.");
+  } catch (error) {
+    DOM.state.criteriaDraft = null;
+    if (byId("rr-criteria-approve")) byId("rr-criteria-approve").disabled = true;
+    setText(byId("rr-criteria-status"), `Criteria could not be loaded: ${describeApiError(error)}`);
+  }
+}
+
+async function proposeDesktopCriteria() {
+  if (!canEditReview() || DOM.state.criteriaBusy) return;
+  const input = byId("rr-criteria-input");
+  const text = input?.value || "";
+  const definitions = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  if (!definitions.length || definitions.length > 100 || definitions.some((line) => line.length > 8000)) {
+    setText(byId("rr-criteria-status"), "Enter 1-100 requirements, one per line, each up to 8,000 characters.");
+    return;
+  }
+  DOM.state.criteriaBusy = true;
+  const request = DOM.state.criteriaRetry?.text === text ? DOM.state.criteriaRetry : {
+    text, key: newIdempotencyKey("criteria"),
+    body: { proposals: definitions.map((definition) => ({ criterion_id: newIdempotencyKey("cr"), definition })) },
+  };
+  DOM.state.criteriaRetry = request;
+  try {
+    await apiRequest("POST", "/criteria/proposals", { body: request.body, idempotencyKey: request.key });
+    DOM.state.criteriaRetry = null;
+    input.value = "";
+    await loadDesktopCriteria();
+  } catch (error) {
+    setText(byId("rr-criteria-status"), `Draft was not confirmed: ${describeApiError(error)}. Retry to confirm the same request.`);
+  } finally {
+    DOM.state.criteriaBusy = false;
+  }
+}
+
+async function approveDesktopCriteria() {
+  const draft = DOM.state.criteriaDraft;
+  if (!canEditReview() || DOM.state.criteriaBusy || !draft?.pending_version) return;
+  if (!DOM.window.confirm("Approve the displayed criteria draft for analysis? Earlier results may need rechecking.")) return;
+  DOM.state.criteriaBusy = true;
+  try {
+    await apiRequest("POST", `/criteria/${draft.pending_version}/activate`, {
+      body: { expected_revision: draft.expected_revision },
+      idempotencyKey: newIdempotencyKey("criteria-approval"),
+    });
+    await loadDesktopCriteria();
+    await refreshFromHelper();
+  } catch (error) {
+    setText(byId("rr-criteria-status"), `Approval was not confirmed: ${describeApiError(error)}. Reload and review the current draft.`);
+  } finally {
+    DOM.state.criteriaBusy = false;
+  }
+}
+
 function wireEvents() {
+  byId("rr-criteria-draft-form")?.addEventListener("submit", (event) => { event.preventDefault(); proposeDesktopCriteria(); });
+  byId("rr-criteria-approve")?.addEventListener("click", approveDesktopCriteria);
+  byId("rr-criteria-reload")?.addEventListener("click", loadDesktopCriteria);
   const tabs = Array.from(DOM.doc.querySelectorAll("[data-workspace-tab]"));
   const showWorkspace = (name, moveFocus = false) => {
     for (const tab of tabs) {
@@ -2752,6 +2825,29 @@ async function connectedBoot(resolved) {
   }
   await refreshFromHelper();
   await loadRequisition();
+  if (bootstrap.desktop_companion && byId("rr-connection-status")) {
+    await loadDesktopCriteria();
+    const updateConnection = async () => {
+      try {
+        const envelope = await apiRequest("GET", "/connection");
+        const connection = envelope.data;
+        const text = !connection.configured
+          ? "Analysis is not connected. Manual review and file plans remain available."
+          : connection.state === "ready"
+            ? "Online analysis connection has processed a job."
+            : connection.state === "retrying"
+              ? "Online analysis is retrying. Your saved reviews remain available."
+              : connection.state === "error"
+                ? `Online analysis needs attention: ${connection.last_error_code || "connection error"}.`
+                : "Online analysis configured. Select candidates to analyze or send feedback.";
+        setText(byId("rr-connection-status"), text);
+      } catch (error) {
+        setText(byId("rr-connection-status"), "Connection status is unavailable. Refresh or relaunch the local helper.");
+      }
+    };
+    await updateConnection();
+    DOM.window.setInterval(updateConnection, 5000);
+  }
 }
 
 function readCsrfToken() {

@@ -1,5 +1,10 @@
 # Acceptance report
 
+The original sections below record an earlier working-tree snapshot. The
+repository is now under Git; desktop companion evidence from the current
+working tree is recorded separately in section 9. Historical counts and gaps
+are retained rather than silently relabeled as current results.
+
 Authority: `docs/PRD.md` (OpenClaw Resume Review PRD v1.0), section 20, which names this
 file as a required deliverable, and `docs/AGENT_BUILD_HANDOFF.md`. The repository-root
 `AGENTS.md` -- the build-time instruction file for coding agents, never loaded at runtime --
@@ -695,3 +700,73 @@ controls that do not exist in this build.
 - **The tree is not under version control**, so the recorded result is bound to a date and a
   working tree, not to a commit. A later edit to `src/` or `tests/` invalidates the match
   between the numbers in section 3 and the code they describe.
+
+## 9. Desktop companion implementation evidence (2026-09-29)
+
+Recorded command:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -m 'not live and not corpus' -p no:cacheprovider --timeout=900 --basetemp docs/review-artifacts/desktop-full-suite-final
+```
+
+Recorded result, exit code 0:
+
+```text
+1131 passed, 15 deselected, 425 warnings in 91.88s (0:01:31)
+```
+
+Output: `docs/review-artifacts/desktop-companion-suite.txt`. The 15 live/corpus
+tests were explicitly deselected. This result includes the 22 synthetic desktop
+helper tests in `tests/unit/test_desktop_helper.py` and the existing deterministic
+suite. Warnings are the existing Starlette/httpx deprecations.
+
+| Implemented behavior | Recorded test ID |
+| --- | --- |
+| Instance-bound operator profile, credentials outside applicant folders, safe diagnostics | `test_profile_is_bound_and_secret_is_not_reported`, `test_applicant_owned_config_and_credentials_refused` |
+| Exact approved hosted HTTPS origin; local-only and incomplete attestation fail closed | `test_exact_origin_and_local_only_boundaries`, `test_incomplete_or_string_attestation_refused`, `test_unsafe_profile_refused` |
+| Authenticated dashboard/assets, one-use pairing, HttpOnly session and CSRF/Origin checks | `test_connected_launch_auth_assets_and_csrf` |
+| Real helper API → durable scan → injected hosted envelope → validated stored analysis → direct/queued feedback; decisions and originals preserved | `test_dashboard_to_worker_to_hosted_envelopes` |
+| Browser criteria draft and confirmation produce bodies accepted by actual API routes; draft is not approval | `test_desktop_criteria_ui_posts_real_contract_and_requires_human_approval` |
+| Bounded transport retries, persistent work across worker recreation | `test_transient_hosted_failure_is_bounded_and_safe`, `test_real_persisted_analysis_runs_after_worker_recreation`, `test_offline_queue_survives_worker_restart` |
+| Worker lifetime and exclusive OS-backed ownership | `test_worker_starts_and_stops_with_helper_lifespan`, `test_second_helper_cannot_take_the_same_folder` |
+| Redirect refused and injected probe explicitly non-live | `test_mock_probe_is_not_live_and_redirect_is_not_followed` |
+
+An additional actual subprocess/localhost HTTP smoke passed. It launched the CLI
+on an ephemeral loopback port, exchanged a launch ticket, fetched the connected
+dashboard and module asset, rejected a CSRF-less mutation, queued and completed a
+scan, and listed one synthetic document. The original remained unchanged and
+inference was unconfigured. Safe result:
+`docs/review-artifacts/desktop-companion-http-smoke.json`.
+
+These results establish the local helper and deterministic transport wiring.
+They do not establish production Plow machine authentication, installed-version
+compatibility, deployed tool denial, provider retention, or real applicant
+analysis. The existing Plow browser dashboard is not automatically a supported
+machine API. Live setup remains required; AT-35/AT-36/AT-40 are not upgraded by
+these results. The published image and usage reporter were not modified or
+deployed during this implementation. See `docs/adr/0003-desktop-hosted-analysis.md`
+and `docs/desktop-companion.md`.
+
+## 10. Hosted companion checks (2026-09-30)
+
+Full default deterministic suite: `1137 passed, 15 skipped, 425 warnings in
+96.63s`, exit 0. Recorded output:
+`docs/review-artifacts/dashboard-suite-final-20260930.log`. The skipped tests
+require opt-in live routes or the real corpus. The warnings are the existing
+Starlette/httpx deprecations.
+
+`tests/unit/test_hosted_companion.py`: six synthetic tests passed (exit 0).
+They cover bridge authentication, protected demo and landing, instance session
+issuance, connected assets, CSRF and exact origin, scan queuing, owner binding,
+unknown instance refusal and public-origin validation.
+`tests/unit/test_api_core.py`: 44 tests passed (exit 0) after resolving the
+envelope schema from the installed package instead of a repository-relative path.
+
+`submission/plow-image/hosted_probe.mjs` passed against the pinned Plow Gateway
+with the updated compiled plugin registration and schema path mounted into the
+candidate image. It exercised the real service, owner authentication, protected
+landing/demo/review/assets, session/CSRF and a successful scan POST (202).
+The publishing workflow repeats that check on the final built image without
+overlays. This check uses synthetic fixtures and a synthetic trusted proxy;
+it makes no inference call and is not evidence of live Plow ingress or usage
+reporting. Source: ADR 0004. Live installation evidence remains separate.

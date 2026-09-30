@@ -250,6 +250,7 @@ class FolderChatService:
                 )
         versions = {
             "reviewer": reviewer,
+            "requested_by": reviewer,
             "message": question,
             "scope_document_ids": list(scope_document_ids or ()),
         }

@@ -791,7 +791,29 @@ def _serve(app: Any, *, host: str, port: int) -> None:
     """Run the ASGI application. Split out so tests can stub the blocking call."""
     import uvicorn
 
-    uvicorn.run(app, host=host, port=int(port))
+    import socket
+    import webbrowser
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
+        listener.bind((host, int(port)))
+        listener.listen(128)
+        chosen_port = listener.getsockname()[1]
+
+        def launch():
+            ticket = app.state.desktop_pairing.create(
+                actor_ref=LOCAL_ACTOR, role=Role.ADMINISTRATOR, port=chosen_port,
+            )
+            if getattr(app.state, "desktop_open_browser", False):
+                webbrowser.open(ticket.url)
+                sys.stderr.write(f"RecruiterAgent is opening at http://{host}:{chosen_port}.\n")
+            else:
+                sys.stderr.write(f"Open this single-use local review link: {ticket.url}\n")
+
+        from .models import Role
+
+        app.state.desktop_launch = launch
+        server = uvicorn.Server(uvicorn.Config(app, host=host, port=chosen_port, access_log=False))
+        server.run(sockets=[listener])
 
 
 def _cmd_start(args: argparse.Namespace, request_id: str) -> tuple[dict[str, Any], ExitCode]:
@@ -806,15 +828,13 @@ def _cmd_start(args: argparse.Namespace, request_id: str) -> tuple[dict[str, Any
                 code=Code.ROUTE_UNAVAILABLE,
                 detail={"reason": "api_package_unavailable"},
             )
-        try:
-            app = factory(repo) if callable(factory) else factory
-        except TypeError as exc:
-            raise DependencyUnavailable(
-                "The installed HTTP API component does not expose an application "
-                "factory this build can start.",
-                code=Code.ROUTE_UNAVAILABLE,
-                detail={"reason": "api_factory_signature"},
-            ) from exc
+        from .helper import build_desktop_app
+        from .openclaw_adapter.connection import load_connection
+
+        connection_path = getattr(args, "connection_config", None)
+        connection = load_connection(Path(connection_path), root=root, instance_id=repo.instance_id) if connection_path else None
+        app = build_desktop_app(repo, root, connection, factory=factory)
+        app.state.desktop_open_browser = bool(getattr(args, "open_browser", False))
         host = "127.0.0.1"
         port = int(getattr(args, "port", 0) or 0)
         warnings = [
@@ -836,9 +856,28 @@ def _cmd_start(args: argparse.Namespace, request_id: str) -> tuple[dict[str, Any
         db.close()
 
 
+def _cmd_check_connection(args: argparse.Namespace, request_id: str):
+    import asyncio
+
+    from .openclaw_adapter.client import OpenClawAdapter
+    from .openclaw_adapter.connection import load_connection
+
+    root, db, repo = _resolve_instance(args.instance)
+    try:
+        config = load_connection(Path(args.connection_config), root=root, instance_id=repo.instance_id)
+        verification = asyncio.run(OpenClawAdapter(config).verify_route())
+        return _envelope(
+            ok=verification.ok, code=Code.OK if verification.ok else Code.ROUTE_UNAVAILABLE,
+            instance_id=repo.instance_id, data=verification.to_dict(), request_id=request_id,
+        ), ExitCode.OK if verification.ok else ExitCode.DEPENDENCY
+    finally:
+        db.close()
+
+
 _HANDLERS = {
     "setup": _cmd_setup,
     "start": _cmd_start,
+    "check-connection": _cmd_check_connection,
     "status": _cmd_status,
     "scan": _cmd_scan,
     "summarize": _cmd_summarize,
@@ -886,7 +925,14 @@ def build_parser() -> argparse.ArgumentParser:
     p_start = sub.add_parser("start", help="Serve the connected review page for an instance.")
     p_start.add_argument("--instance", required=True)
     p_start.add_argument("--port", type=int, default=0)
+    p_start.add_argument("--connection-config", help="Protected, instance-bound hosted HTTPS connection profile.")
+    p_start.add_argument("--open-browser", action="store_true", help="Open the single-use local-owner review link.")
     p_start.add_argument("--json", action="store_true", dest="json_output")
+
+    p_connection = sub.add_parser("check-connection", help="Probe the configured online analysis API without sending resumes.")
+    p_connection.add_argument("--instance", required=True)
+    p_connection.add_argument("--connection-config", required=True)
+    p_connection.add_argument("--json", action="store_true", dest="json_output")
 
     p_status = sub.add_parser("status", help="Report instance status (JSON by default).")
     p_status.add_argument("--instance", required=True)

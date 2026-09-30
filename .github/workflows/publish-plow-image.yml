@@ -39,6 +39,7 @@ jobs:
           docker build --platform linux/amd64 --build-arg SOURCE_REVISION="$GITHUB_SHA" --tag "$IMAGE:$GITHUB_SHA" dist/plow-image
           docker run --rm --network none --entrypoint /opt/plow/skills/recruiteragent/.venv/bin/python "$IMAGE:$GITHUB_SHA" /opt/recruiteragent/smoke.py
           docker run --rm --network none --entrypoint /opt/plow/skills/recruiteragent/.venv/bin/python "$IMAGE:$GITHUB_SHA" /opt/recruiteragent/smoke.py --gateway
+          docker run --rm --network none --entrypoint node "$IMAGE:$GITHUB_SHA" /opt/recruiteragent/hosted_probe.mjs
       - name: Publish immutable image using Plow CLI
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}

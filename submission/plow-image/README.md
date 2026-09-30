@@ -103,6 +103,24 @@ volume. Initial admission is not a prize-verification request.
 
 ## What a new install does
 
+The dashboard update adds an authenticated full-page companion at
+`https://YOUR_INSTANCE.plow.run/recruiteragent/`. Open it directly in a browser
+after signing into Plow. It lists registered job workspaces and links each live
+review page. The Gateway plugin starts and supervises the loopback helper;
+no additional public port or widget sandbox is needed. The inherited Gateway,
+phone channel and usage reporter remain in place. See
+[ADR 0004](../../docs/adr/0004-hosted-owner-dashboard.md) for the trust boundary.
+The immutable image above is the earlier release; it does not include this
+dashboard update. A newly published digest and separate live test are required.
+
+An additional offline check runs the actual pinned Gateway plugin, service,
+authenticated landing/demo/review/assets, session and CSRF flow, and scan API:
+
+```bash
+docker run --rm --network none --entrypoint node \
+  ghcr.io/synchronic1/recruiteragent:v2 /opt/recruiteragent/hosted_probe.mjs
+```
+
 Plow injects the new owner's runtime credential and resolves their phone line at
 boot. The skill is already installed and visible; no pip command is needed from
 the owner. The first owner message starts onboarding for a requisition and resume

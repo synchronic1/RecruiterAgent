@@ -494,9 +494,11 @@ def test_start_serves_the_installed_app_without_binding_a_port(
     """When an API factory is installed, start hands it a repository and serves it."""
     captured: dict = {}
 
-    def _fake_factory(repository):
+    def _fake_factory(repository, **kwargs):
+        from resume_review.api import create_app
+
         captured["repository"] = repository
-        return object()
+        return create_app(repository, **kwargs)
 
     monkeypatch.setattr(cli, "_load_api_app", lambda: _fake_factory)
     monkeypatch.setattr(cli, "_serve", lambda app, *, host, port: captured.update(app=app, host=host, port=port))

@@ -91,3 +91,11 @@ instructions. Do not use the static demo server as the product backend. Consult
 the detailed runbook. A real approved restricted OpenClaw route, credentials,
 privacy settings, and approved criteria remain operator setup; an installer must
 not fabricate these or silently start inference.
+
+For a desktop folder paired with an online-only agent, follow
+`application/docs/desktop-companion.md`. Use an operator-owned HTTPS connection
+profile outside the job folder and launch with `start --connection-config
+<protected-profile.json> --open-browser`. The packaged example lives at
+`application/examples/desktop-connection.example.json`; approvals start false.
+The desktop needs the Python helper, not a second OpenClaw gateway. A hosted
+browser dashboard URL alone is not a machine-authenticated restricted API.
