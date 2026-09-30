@@ -1,0 +1,9 @@
+**
+!Dockerfile
+!.dockerignore
+!install_runtime.py
+!smoke.py
+!prompt.md
+!skills/
+!skills/**
+!image-context-manifest.json

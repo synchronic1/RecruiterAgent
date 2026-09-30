@@ -22,16 +22,18 @@ def build(output: Path) -> Path:
         else:
             target = "skill/" + relative
         files[target] = source
-    for name in ("build_openclaw_package.py", "build_public_source.py", "sync_web_assets.py"):
+    for name in ("build_openclaw_package.py", "build_public_source.py", "build_plow_image.py", "sync_web_assets.py"):
         files["tools/" + name] = ROOT / "tools" / name
     files[".gitignore"] = ROOT / ".gitignore"
     for folder, suffixes in (("tests", {".py", ".json", ".txt", ".md"}),
                              ("submission", {".py", ".json", ".md", ".html", ".png"})):
         for path in (ROOT / folder).rglob("*"):
-            if (path.is_file() and path.suffix in suffixes
+            if (path.is_file() and (path.suffix in suffixes or path.name in ("Dockerfile", ".dockerignore"))
                     and "__pycache__" not in path.parts
                     and path.name not in ("agent_index_client.py", "upstream-manifest.json")):
                 files[path.relative_to(ROOT).as_posix()] = path
+    for path in (ROOT / ".github/workflows").glob("*.yml"):
+        files[path.relative_to(ROOT).as_posix()] = path
     for source in files.values():
         if not source.is_file() or source.is_symlink():
             raise ValueError("Missing or symlinked public source")

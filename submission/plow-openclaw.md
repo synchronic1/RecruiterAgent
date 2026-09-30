@@ -77,6 +77,12 @@ the base's inherited reporter.
 
 ## Publish a RecruiterAgent variant for one-click installation
 
+The runnable variant and checked publishing workflow now live in
+[plow-image/](plow-image/README.md). Start with that guide for the actual Dockerfile,
+allowlisted build context, installed runtime, offline application and gateway
+checks, and GitHub Actions publishing. The following describes the upstream
+contract and admin admission step.
+
 Build a separate image using the upstream documented `FROM
 public.ecr.aws/e1h7x4a2/plow-cloud-agents:base-<commit>@sha256:<digest>`.
 Find an actually published base reference in the registry; do not guess a tag

@@ -1,0 +1,37 @@
+name: Publish Plow RecruiterAgent image
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Prepare source-only build context
+        run: python3 tools/build_plow_image.py --output dist/plow-image
+      - name: Build and check application
+        env:
+          IMAGE: ghcr.io/synchronic1/recruiteragent
+        run: |
+          docker build --platform linux/amd64 --build-arg SOURCE_REVISION="$GITHUB_SHA" --tag "$IMAGE:$GITHUB_SHA" dist/plow-image
+          docker run --rm --network none --entrypoint /opt/plow/skills/recruiteragent/.venv/bin/python "$IMAGE:$GITHUB_SHA" /opt/recruiteragent/smoke.py
+          docker run --rm --network none --entrypoint /opt/plow/skills/recruiteragent/.venv/bin/python "$IMAGE:$GITHUB_SHA" /opt/recruiteragent/smoke.py --gateway
+      - name: Publish immutable image using Plow CLI
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE: ghcr.io/synchronic1/recruiteragent
+        run: |
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          curl --fail --silent --show-error --location https://raw.githubusercontent.com/plow-pbc/plow-agents/3033a59754067bb21b4b6b2844967db343ecf7bd/bin/plow-agents --output /tmp/plow-agents
+          echo '709a9ecda03b31575f0e5fb3b5fd16314aec01a36408996dccdbcfb83aa54c7b  /tmp/plow-agents' | sha256sum --check
+          python3 /tmp/plow-agents image push "$IMAGE:$GITHUB_SHA" | tee /tmp/image-reference.txt
+          printf '\nPublished image: `%s`\n' "$(tail -n 1 /tmp/image-reference.txt)" >> "$GITHUB_STEP_SUMMARY"
+          docker logout ghcr.io
