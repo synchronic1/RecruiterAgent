@@ -7,6 +7,28 @@ description: Set up and operate a folder-local resume review workspace with evid
 
 Set up and operate a review workspace for one folder of resumes.
 
+## Hosted Plow dashboard: use the existing service
+
+On the RecruiterAgent Plow image, the Gateway already supervises the companion.
+This section takes precedence over the desktop `start` instructions below.
+After `setup` or `scan`, link the user to the actual Plow origin followed by
+`/api/v1/instances/<returned-instance-id>/review`. The workspace list is at
+`/recruiteragent/`; reload it after provisioning a job. Use the instance ID from
+the registered workspace, never invent a job ID or use the design demo as its
+results page.
+
+Do not run `start`, `nohup`, another HTTP server, change ports, kill helper
+processes, or request desktop pairing tickets for this hosted page. Plow owner
+login and the installed bridge issue the review session automatically. A masked
+token must remain masked; do not capture it into a file or read around masking.
+
+Before claiming analysis results are displayed, check the connected documents
+endpoint or the stored profiles. An agent's chat response or subagent report is
+not a saved validated analysis profile. Scanning can show extracted documents
+without inference. Criteria approval and an approved restricted model route
+remain required for validated analysis; never manufacture approval, reclassify
+model drafts as human decisions, or bypass the existing result validator.
+
 ## Install this source package
 
 The distributable skill includes `application/` with Python source, frontend

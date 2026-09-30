@@ -796,3 +796,24 @@ usage, replacement client or manual usage payload was used. This verifies one
 delivery from this owner install; recurring five-minute delivery and another
 account's install remain separate checks. The upstream reporting schedule and
 client were preserved unchanged.
+
+### Hosted job routing follow-up
+
+The owner-created `dropbox-batch` workspace was verified through actual owner
+ingress at instance `inst_c40616b9a6f7454f93a08ff8aa624df4`. Its registered link
+appeared after reloading `/recruiteragent/`, and its connected review page
+returned HTTP 200. The documents API listed 51 submissions, zero saved summary
+profiles, all unreviewed and no pending file intent. Read-only database metadata
+confirmed 45 extracted documents waiting for approved criteria and six
+`SCAN_ONLY_DOCUMENT` extraction failures. Agent chat/subagent drafts were not
+represented as validated saved profiles.
+
+The installed agent was given the exact registered page address and a persistent
+correction appended to its trusted workspace instructions, outside job folders.
+It skips desktop `start`/pairing, additional servers, helper termination and
+masked-token recovery when using the managed hosted service. Its tool result
+confirmed the correction without modifying applicant files or reviewer state.
+The same instruction correction is in `skill/SKILL.md`, `references/install.md`
+and the image prompt for subsequent builds; the published image digest did not
+change during this instruction-only repair. Source-package and image-context
+checks: three tests passed, exit 0.

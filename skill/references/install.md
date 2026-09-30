@@ -5,6 +5,13 @@ installed, use the [published image guide](https://github.com/synchronic1/Recrui
 It includes the immutable image digest, install commands, and recorded checks.
 The instructions below install the source skill into an existing OpenClaw.
 
+For the hosted image, open the actual Plow origin plus `/recruiteragent/`.
+After provisioning, reload that page or open
+`/api/v1/instances/<returned-instance-id>/review` on the same origin. The Gateway
+starts the companion automatically and owner login establishes its session.
+Skip the desktop `start` and pairing steps below when using that hosted service.
+Do not create another server or extract a masked pairing token.
+
 ## Prepare the package from a repository checkout
 
 ```powershell

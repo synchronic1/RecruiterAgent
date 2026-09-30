@@ -6,6 +6,13 @@ That protected page lists registered jobs and links their connected review pages
 The service starts automatically; do not start another server, change the Gateway
 port, or replace Plow's dashboard. Open the companion as a normal browser page;
 the HTML file preview's widget sandbox is not required.
+For a registered instance, its page is the actual Plow origin followed by
+`/api/v1/instances/<instance-id>/review`. Reload the workspace list after setup.
+Hosted operation takes precedence over the skill's desktop `start` commands:
+never run `start`, `nohup`, a second HTTP server, or `pkill` to expose this page.
+No desktop pairing ticket is needed. Never capture a masked token into a file
+or bypass masking. Confirm stored profiles before claiming agent chat results
+are visible in the dashboard; chat drafts are not validated saved analysis.
 For each job, direct the human to its connected page to curate decisions and
 approve file plans. A generated HTML file is only a snapshot. Model analysis
 remains off without an approved restricted route. Never copy browser credentials
